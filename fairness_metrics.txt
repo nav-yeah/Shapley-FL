@@ -1,0 +1,18 @@
+ShapFed-style fairness metric (Pearson correlation between
+standalone client accuracy on the global test set and the
+credit signal each scheme assigns):
+
+  vanilla FedAvg (credit = data size):        r = +0.1444
+  per-round Shapley values (cumulative phi):  r = +0.1046
+  Shapley-softmax aggregation weights:        r = -0.0112
+
+Config: BETA=50, WARMUP_ROUNDS=0, N_ROUNDS=5, seed=42
+Final accuracy — vanilla: 0.7420, weighted: 0.7411
+Per-round accuracy (vanilla):  0.1114, 0.5140, 0.5386, 0.6201, 0.7093, 0.7420
+Per-round accuracy (weighted): 0.1114, 0.5333, 0.5439, 0.6943, 0.7247, 0.7411
+
+Convergence speed (first round reaching target accuracy):
+  target   vanilla   weighted
+  >=0.50        1         1
+  >=0.60        3         3
+  >=0.70        4         4
