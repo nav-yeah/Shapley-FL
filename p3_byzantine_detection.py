@@ -7,8 +7,9 @@ to be modified. It does three things:
   2. Recomputes per-round Shapley values for scenario_4_noisy_labels.pkl
      using the same GTG-Shapley logic as export_shapley_csv.py.
   3. Applies a drift detector that uses rolling variance, normalized trend
-     slope, and a personal z-score, then requires sustained anomalies
-     across consecutive eligible rounds before flagging a client.
+      slope, and a temporal z-score built from standardized residuals
+      against the clean per-round baseline, then requires sustained
+      anomalies across consecutive eligible rounds before flagging a client.
 
 Outputs:
   - byzantine_detection_results.csv
@@ -62,7 +63,9 @@ CONVERGENCE_WINDOW = 20
 CONVERGENCE_THRESHOLD = 0.05
 
 WINDOW_SIZE = 3
-MIN_SUSTAINED_WINDOWS = 2
+MIN_SUSTAINED_RATIO = 0.30
+TEMPORAL_Z_WINDOW = 2
+TEMPORAL_Z_THRESHOLD = 2.0
 
 STD_MULTIPLIER = 1.0
 
@@ -217,19 +220,25 @@ def load_baseline_series(baseline_csv: Path):
     return df
 
 
-def rolling_window_features(values: np.ndarray, window_size: int):
+def rolling_window_features(values: np.ndarray, window_size: int, round_numbers=None,
+                            round_means=None, round_stds=None):
     records = []
     for index in range(len(values)):
         round_number = index + 1
         current = float(values[index])
 
         if index + 1 < window_size:
+            if round_numbers is not None and round_means is not None and round_stds is not None:
+                round_number = int(round_numbers[index])
+                z_score = (current - round_means[round_number]) / (round_stds[round_number] + 1e-6)
+            else:
+                z_score = 0.0
             records.append(
                 {
                     "round": round_number,
                     "rolling_variance": np.nan,
                     "trend_slope": np.nan,
-                    "z_score": np.nan,
+                    "z_score": z_score,
                     "raw_anomaly": False,
                 }
             )
@@ -243,11 +252,9 @@ def rolling_window_features(values: np.ndarray, window_size: int):
         slope = float(np.polyfit(x, window, 1)[0])
         normalized_slope = slope / (abs(window_mean) + 1e-3)
 
-        history = values[:index]
-        if len(history) > 1:
-            history_mean = float(np.mean(history))
-            history_std = float(np.std(history, ddof=0))
-            z_score = (current - history_mean) / (history_std + 1e-6)
+        if round_numbers is not None and round_means is not None and round_stds is not None:
+            round_number = int(round_numbers[index])
+            z_score = (current - round_means[round_number]) / (round_stds[round_number] + 1e-6)
         else:
             z_score = 0.0
 
@@ -276,32 +283,45 @@ def calibrate_thresholds(baseline_df: pd.DataFrame, window_size: int):
     return Thresholds(round_means=round_means, round_stds=round_stds)
 
 
-def apply_detector(df: pd.DataFrame, thresholds: Thresholds, window_size: int, sustain: int):
+def apply_detector(df: pd.DataFrame, thresholds: Thresholds, window_size: int, sustain_ratio: float):
     output_rows = []
 
     for client_id, client_frame in df.groupby("client_id"):
         client_frame = client_frame.sort_values("round").reset_index(drop=True)
         values = client_frame["shapley_value"].to_numpy(dtype=float)
-        feature_rows = rolling_window_features(values, window_size)
+        round_numbers = client_frame["round"].to_numpy(dtype=int)
+        feature_rows = rolling_window_features(
+            values,
+            window_size,
+            round_numbers=round_numbers,
+            round_means=thresholds.round_means,
+            round_stds=thresholds.round_stds,
+        )
 
-        raw_flags = []
+        temporal_z_scores = []
         for index, feature_row in enumerate(feature_rows):
-            round_number = int(client_frame.loc[index, "round"])
-            if np.isnan(feature_row["rolling_variance"]):
-                raw_flags.append(False)
-                continue
+            current_z = feature_row["z_score"]
+            if index + 1 < TEMPORAL_Z_WINDOW:
+                temporal_z_scores.append(current_z)
+            else:
+                window_scores = [row["z_score"] for row in feature_rows[max(0, index - TEMPORAL_Z_WINDOW + 1): index + 1]]
+                temporal_z_scores.append(float(np.mean(window_scores)))
 
-            mean = thresholds.round_means[round_number]
-            std = thresholds.round_stds[round_number]
-            deviation = abs(values[index] - mean)
-            is_anomalous = deviation > (STD_MULTIPLIER * std)
-            raw_flags.append(is_anomalous)
+        method_flags = []
+        naive_flags = []
+        for index, feature_row in enumerate(feature_rows):
+            single_round_z = feature_row["z_score"]
+            naive_flags.append(abs(single_round_z) >= TEMPORAL_Z_THRESHOLD)
+            method_flags.append(abs(temporal_z_scores[index]) >= TEMPORAL_Z_THRESHOLD)
 
-        sustained_flags = [False] * len(raw_flags)
-        for index, is_anomalous in enumerate(raw_flags):
-            if not is_anomalous or index + 1 < sustain:
+        eligible_rounds = len(feature_rows)
+        sustain_count = max(1, int(np.ceil(sustain_ratio * eligible_rounds)))
+
+        sustained_flags = [False] * len(method_flags)
+        for index, is_anomalous in enumerate(method_flags):
+            if not is_anomalous:
                 continue
-            if sum(raw_flags[max(0, index - 2): index + 1]) >= sustain:
+            if sum(method_flags[: index + 1]) >= sustain_count:
                 sustained_flags[index] = True
 
         for index, feature_row in enumerate(feature_rows):
@@ -316,10 +336,8 @@ def apply_detector(df: pd.DataFrame, thresholds: Thresholds, window_size: int, s
                     "trend_slope": float(feature_row["trend_slope"])
                     if not np.isnan(feature_row["trend_slope"])
                     else np.nan,
-                    "z_score": float(feature_row["z_score"])
-                    if not np.isnan(feature_row["z_score"])
-                    else np.nan,
-                    "raw_anomaly": int(raw_flags[index]),
+                    "z_score": float(temporal_z_scores[index]),
+                    "raw_anomaly": int(naive_flags[index]),
                 }
             )
 
@@ -450,7 +468,7 @@ def main():
     thresholds = calibrate_thresholds(baseline_df, WINDOW_SIZE)
 
     scenario_df, client_ids = run_scenario_rounds(SCENARIO_PATH)
-    metrics_df = apply_detector(scenario_df, thresholds, WINDOW_SIZE, MIN_SUSTAINED_WINDOWS)
+    metrics_df = apply_detector(scenario_df, thresholds, WINDOW_SIZE, MIN_SUSTAINED_RATIO)
     output_df = metrics_df.drop(columns=["raw_anomaly"]).sort_values(["round", "client_id"])
     output_df.to_csv(OUT_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
 
@@ -464,8 +482,8 @@ def main():
         "",
         f"Baseline calibration source: {BASELINE_CSV}",
         f"Scenario evaluated: {SCENARIO_PATH}",
-        f"Window size: {WINDOW_SIZE}, sustained windows: {MIN_SUSTAINED_WINDOWS}",
-        f"Thresholds calibrated from clean data: roundwise mean +/- {STD_MULTIPLIER:.1f} std",
+        f"Window size: {WINDOW_SIZE}, sustained ratio: {MIN_SUSTAINED_RATIO:.2f}",
+        f"Thresholds calibrated from clean data: temporal z threshold={TEMPORAL_Z_THRESHOLD:.1f}, sustain ratio={MIN_SUSTAINED_RATIO:.2f} ({int(np.ceil(MIN_SUSTAINED_RATIO * N_ROUNDS))} anomalous rounds required)",
         f"Eligible rows for row-level metrics: {len(eligible_df)}",
         "",
         format_metric_line("Method", method_metrics),
