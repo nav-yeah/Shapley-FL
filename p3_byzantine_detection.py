@@ -46,6 +46,7 @@ from fl_utils import (
 
 
 BASELINE_CSV = Path("shapley_scores.csv")
+DETECTION_INPUT_CSV = Path("shapley_scores.csv")
 SCENARIO_PATH = Path("scenarios") / "scenario_4_noisy_labels.pkl"
 OUT_CSV = Path("byzantine_detection_results.csv")
 OUT_TXT = Path("byzantine_detection_metrics.txt")
@@ -66,6 +67,7 @@ WINDOW_SIZE = 3
 MIN_SUSTAINED_RATIO = 0.30
 TEMPORAL_Z_WINDOW = 2
 TEMPORAL_Z_THRESHOLD = 2.0
+SLOPE_DENOM_FLOOR = 0.01
 
 STD_MULTIPLIER = 1.0
 
@@ -220,6 +222,16 @@ def load_baseline_series(baseline_csv: Path):
     return df
 
 
+def load_detection_series(detection_csv: Path):
+    df = pd.read_csv(detection_csv)
+    required = {"round", "client_id", "shapley_value"}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError(f"Missing required columns in {detection_csv}: {sorted(missing)}")
+    df = df.sort_values(["client_id", "round"]).reset_index(drop=True)
+    return df
+
+
 def rolling_window_features(values: np.ndarray, window_size: int, round_numbers=None,
                             round_means=None, round_stds=None):
     records = []
@@ -250,7 +262,8 @@ def rolling_window_features(values: np.ndarray, window_size: int, round_numbers=
 
         x = np.arange(window_size, dtype=float)
         slope = float(np.polyfit(x, window, 1)[0])
-        normalized_slope = slope / (abs(window_mean) + 1e-3)
+        # Avoid unstable slope inflation when the window mean is near zero.
+        normalized_slope = slope / max(abs(window_mean), SLOPE_DENOM_FLOOR)
 
         if round_numbers is not None and round_means is not None and round_stds is not None:
             round_number = int(round_numbers[index])
@@ -318,11 +331,14 @@ def apply_detector(df: pd.DataFrame, thresholds: Thresholds, window_size: int, s
         sustain_count = max(1, int(np.ceil(sustain_ratio * eligible_rounds)))
 
         sustained_flags = [False] * len(method_flags)
+        cumulative_anomalies = 0
+        is_client_flagged = False
         for index, is_anomalous in enumerate(method_flags):
-            if not is_anomalous:
-                continue
-            if sum(method_flags[: index + 1]) >= sustain_count:
-                sustained_flags[index] = True
+            if is_anomalous:
+                cumulative_anomalies += 1
+            if cumulative_anomalies >= sustain_count:
+                is_client_flagged = True
+            sustained_flags[index] = bool(is_client_flagged)
 
         for index, feature_row in enumerate(feature_rows):
             output_rows.append(
@@ -462,16 +478,24 @@ def main():
         raise FileNotFoundError(
             f"Missing {SCENARIO_PATH}. Run build_scenarios.py after preprocessing the HAR dataset."
         )
+    if not DETECTION_INPUT_CSV.exists():
+        raise FileNotFoundError(
+            f"Missing {DETECTION_INPUT_CSV}. Run export_shapley_csv.py first or keep the committed CSV."
+        )
 
     start = time.time()
     baseline_df = load_baseline_series(BASELINE_CSV)
     thresholds = calibrate_thresholds(baseline_df, WINDOW_SIZE)
 
-    scenario_df, client_ids = run_scenario_rounds(SCENARIO_PATH)
-    metrics_df = apply_detector(scenario_df, thresholds, WINDOW_SIZE, MIN_SUSTAINED_RATIO)
-    output_df = metrics_df.drop(columns=["raw_anomaly"]).sort_values(["round", "client_id"])
+    # Deliverable CSV for P4: run detector over the full 30-client handoff file.
+    detection_df = load_detection_series(DETECTION_INPUT_CSV)
+    deliverable_df = apply_detector(detection_df, thresholds, WINDOW_SIZE, MIN_SUSTAINED_RATIO)
+    output_df = deliverable_df.drop(columns=["raw_anomaly"]).sort_values(["round", "client_id"])
     output_df.to_csv(OUT_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
 
+    # Evaluation with known labels: run on scenario_4_noisy_labels (10 clients).
+    scenario_df, client_ids = run_scenario_rounds(SCENARIO_PATH)
+    metrics_df = apply_detector(scenario_df, thresholds, WINDOW_SIZE, MIN_SUSTAINED_RATIO)
     method_metrics, naive_metrics, eligible_df = row_level_metrics(metrics_df, client_ids, WINDOW_SIZE)
     client_summary = client_level_metrics(metrics_df, client_ids)
     severity_df = severity_summary(client_summary)
@@ -484,6 +508,8 @@ def main():
         f"Scenario evaluated: {SCENARIO_PATH}",
         f"Window size: {WINDOW_SIZE}, sustained ratio: {MIN_SUSTAINED_RATIO:.2f}",
         f"Thresholds calibrated from clean data: temporal z threshold={TEMPORAL_Z_THRESHOLD:.1f}, sustain ratio={MIN_SUSTAINED_RATIO:.2f} ({int(np.ceil(MIN_SUSTAINED_RATIO * N_ROUNDS))} anomalous rounds required)",
+        f"Slope normalization floor: {SLOPE_DENOM_FLOOR:.2f}",
+        f"Window behavior: rolling_variance/trend_slope are NaN for rounds < {WINDOW_SIZE} by design.",
         f"Eligible rows for row-level metrics: {len(eligible_df)}",
         "",
         format_metric_line("Method", method_metrics),
@@ -502,7 +528,7 @@ def main():
     lines.extend(
         [
             "",
-            f"Rows written to {OUT_CSV} ({len(output_df)} rows)",
+            f"Rows written to {OUT_CSV} ({len(output_df)} rows from full 30-client detection input)",
             f"Summary plot written to {OUT_PNG}",
             f"Total runtime: {time.time() - start:.2f}s",
             "",

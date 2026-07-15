@@ -4,9 +4,11 @@ Baseline calibration source: shapley_scores.csv
 Scenario evaluated: scenarios\scenario_4_noisy_labels.pkl
 Window size: 3, sustained ratio: 0.30
 Thresholds calibrated from clean data: temporal z threshold=2.0, sustain ratio=0.30 (2 anomalous rounds required)
+Slope normalization floor: 0.01
+Window behavior: rolling_variance/trend_slope are NaN for rounds < 3 by design.
 Eligible rows for row-level metrics: 30
 
-Method     precision=0.8333 recall=0.4167 f1=0.5556 support=24 tp=10 fp=2 fn=14
+Method     precision=0.8750 recall=0.8750 f1=0.8750 support=24 tp=21 fp=3 fn=3
 Naive      precision=0.7273 recall=0.3333 f1=0.4571 support=24 tp=8 fp=3 fn=16
 
 Severity-bucket client precision/recall/F1 (method vs naive):
@@ -17,9 +19,9 @@ severity | method_p method_r method_f1 | naive_p naive_r naive_f1 | n_clients
   0.15 | 1.0000 1.0000 1.0000 | 1.0000 1.0000 1.0000 | 2
   0.20 | 1.0000 1.0000 1.0000 | 1.0000 1.0000 1.0000 | 2
 
-Rows written to byzantine_detection_results.csv (50 rows)
+Rows written to byzantine_detection_results.csv (150 rows from full 30-client detection input)
 Summary plot written to byzantine_detection_summary.png
-Total runtime: 15.04s
+Total runtime: 39.51s
 
 Client-level summary:
   client=1 severity=0.00 truth=0 method_detected=0 naive_detected=1
