@@ -1,0 +1,909 @@
+{
+  "contractAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "source": "..\\byzantine_detection_results_merged.csv",
+  "txCount": 150,
+  "totalGasUsed": "30406220",
+  "avgGasPerEntry": "202708",
+  "perEntry": [
+    {
+      "round": "1",
+      "client_id": "1",
+      "flagged": false,
+      "gasUsed": "229189"
+    },
+    {
+      "round": "1",
+      "client_id": "2",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "3",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "4",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "5",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "6",
+      "flagged": false,
+      "gasUsed": "212077"
+    },
+    {
+      "round": "1",
+      "client_id": "7",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "8",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "9",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "10",
+      "flagged": false,
+      "gasUsed": "212077"
+    },
+    {
+      "round": "1",
+      "client_id": "11",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "12",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "13",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "14",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "15",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "16",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "17",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "18",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "19",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "20",
+      "flagged": false,
+      "gasUsed": "212077"
+    },
+    {
+      "round": "1",
+      "client_id": "21",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "22",
+      "flagged": false,
+      "gasUsed": "212377"
+    },
+    {
+      "round": "1",
+      "client_id": "23",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "24",
+      "flagged": false,
+      "gasUsed": "212389"
+    },
+    {
+      "round": "1",
+      "client_id": "25",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "1",
+      "client_id": "26",
+      "flagged": false,
+      "gasUsed": "212077"
+    },
+    {
+      "round": "1",
+      "client_id": "27",
+      "flagged": false,
+      "gasUsed": "212077"
+    },
+    {
+      "round": "1",
+      "client_id": "28",
+      "flagged": false,
+      "gasUsed": "212077"
+    },
+    {
+      "round": "1",
+      "client_id": "29",
+      "flagged": false,
+      "gasUsed": "212077"
+    },
+    {
+      "round": "1",
+      "client_id": "30",
+      "flagged": false,
+      "gasUsed": "212089"
+    },
+    {
+      "round": "2",
+      "client_id": "1",
+      "flagged": false,
+      "gasUsed": "195277"
+    },
+    {
+      "round": "2",
+      "client_id": "2",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "3",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "4",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "5",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "6",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "7",
+      "flagged": false,
+      "gasUsed": "195277"
+    },
+    {
+      "round": "2",
+      "client_id": "8",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "9",
+      "flagged": true,
+      "gasUsed": "234098"
+    },
+    {
+      "round": "2",
+      "client_id": "10",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "11",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "12",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "13",
+      "flagged": true,
+      "gasUsed": "234098"
+    },
+    {
+      "round": "2",
+      "client_id": "14",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "15",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "16",
+      "flagged": true,
+      "gasUsed": "234086"
+    },
+    {
+      "round": "2",
+      "client_id": "17",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "18",
+      "flagged": true,
+      "gasUsed": "234098"
+    },
+    {
+      "round": "2",
+      "client_id": "19",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "20",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "21",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "22",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "23",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "24",
+      "flagged": true,
+      "gasUsed": "234398"
+    },
+    {
+      "round": "2",
+      "client_id": "25",
+      "flagged": true,
+      "gasUsed": "234086"
+    },
+    {
+      "round": "2",
+      "client_id": "26",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "27",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "28",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "2",
+      "client_id": "29",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "2",
+      "client_id": "30",
+      "flagged": false,
+      "gasUsed": "195265"
+    },
+    {
+      "round": "3",
+      "client_id": "1",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "2",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "3",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "4",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "5",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "6",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "7",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "8",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "9",
+      "flagged": true,
+      "gasUsed": "216986"
+    },
+    {
+      "round": "3",
+      "client_id": "10",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "11",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "12",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "13",
+      "flagged": true,
+      "gasUsed": "216998"
+    },
+    {
+      "round": "3",
+      "client_id": "14",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "3",
+      "client_id": "15",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "3",
+      "client_id": "16",
+      "flagged": true,
+      "gasUsed": "216998"
+    },
+    {
+      "round": "3",
+      "client_id": "17",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "18",
+      "flagged": true,
+      "gasUsed": "216998"
+    },
+    {
+      "round": "3",
+      "client_id": "19",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "20",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "21",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "22",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "23",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "24",
+      "flagged": true,
+      "gasUsed": "216998"
+    },
+    {
+      "round": "3",
+      "client_id": "25",
+      "flagged": true,
+      "gasUsed": "217286"
+    },
+    {
+      "round": "3",
+      "client_id": "26",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "27",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "3",
+      "client_id": "28",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "3",
+      "client_id": "29",
+      "flagged": true,
+      "gasUsed": "234398"
+    },
+    {
+      "round": "3",
+      "client_id": "30",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "1",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "4",
+      "client_id": "2",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "3",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "4",
+      "client_id": "4",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "5",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "4",
+      "client_id": "6",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "7",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "8",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "9",
+      "flagged": true,
+      "gasUsed": "217298"
+    },
+    {
+      "round": "4",
+      "client_id": "10",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "11",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "4",
+      "client_id": "12",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "4",
+      "client_id": "13",
+      "flagged": true,
+      "gasUsed": "216974"
+    },
+    {
+      "round": "4",
+      "client_id": "14",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "4",
+      "client_id": "15",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "4",
+      "client_id": "16",
+      "flagged": true,
+      "gasUsed": "216998"
+    },
+    {
+      "round": "4",
+      "client_id": "17",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "18",
+      "flagged": true,
+      "gasUsed": "217298"
+    },
+    {
+      "round": "4",
+      "client_id": "19",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "20",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "4",
+      "client_id": "21",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "22",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "4",
+      "client_id": "23",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "4",
+      "client_id": "24",
+      "flagged": true,
+      "gasUsed": "217298"
+    },
+    {
+      "round": "4",
+      "client_id": "25",
+      "flagged": true,
+      "gasUsed": "216998"
+    },
+    {
+      "round": "4",
+      "client_id": "26",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "4",
+      "client_id": "27",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "4",
+      "client_id": "28",
+      "flagged": true,
+      "gasUsed": "234386"
+    },
+    {
+      "round": "4",
+      "client_id": "29",
+      "flagged": true,
+      "gasUsed": "217286"
+    },
+    {
+      "round": "4",
+      "client_id": "30",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "1",
+      "flagged": false,
+      "gasUsed": "175005"
+    },
+    {
+      "round": "5",
+      "client_id": "2",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "3",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "4",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "5",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "6",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "7",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "8",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "9",
+      "flagged": true,
+      "gasUsed": "197014"
+    },
+    {
+      "round": "5",
+      "client_id": "10",
+      "flagged": true,
+      "gasUsed": "214114"
+    },
+    {
+      "round": "5",
+      "client_id": "11",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "12",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "13",
+      "flagged": true,
+      "gasUsed": "197014"
+    },
+    {
+      "round": "5",
+      "client_id": "14",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "15",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "16",
+      "flagged": true,
+      "gasUsed": "197002"
+    },
+    {
+      "round": "5",
+      "client_id": "17",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "18",
+      "flagged": true,
+      "gasUsed": "197014"
+    },
+    {
+      "round": "5",
+      "client_id": "19",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "5",
+      "client_id": "20",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "21",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "22",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "23",
+      "flagged": false,
+      "gasUsed": "195289"
+    },
+    {
+      "round": "5",
+      "client_id": "24",
+      "flagged": true,
+      "gasUsed": "197014"
+    },
+    {
+      "round": "5",
+      "client_id": "25",
+      "flagged": true,
+      "gasUsed": "197014"
+    },
+    {
+      "round": "5",
+      "client_id": "26",
+      "flagged": false,
+      "gasUsed": "194989"
+    },
+    {
+      "round": "5",
+      "client_id": "27",
+      "flagged": false,
+      "gasUsed": "194977"
+    },
+    {
+      "round": "5",
+      "client_id": "28",
+      "flagged": true,
+      "gasUsed": "197014"
+    },
+    {
+      "round": "5",
+      "client_id": "29",
+      "flagged": true,
+      "gasUsed": "197014"
+    },
+    {
+      "round": "5",
+      "client_id": "30",
+      "flagged": false,
+      "gasUsed": "194977"
+    }
+  ]
+}

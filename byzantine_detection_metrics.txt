@@ -20,8 +20,10 @@ severity | method_p method_r method_f1 | naive_p naive_r naive_f1 | n_clients
   0.20 | 1.0000 1.0000 1.0000 | 1.0000 1.0000 1.0000 | 2
 
 Rows written to byzantine_detection_results.csv (150 rows from full 30-client detection input)
+Scenario-4 flagged rows written to byzantine_scenario4_flagged.csv (50 rows, 30 flagged)
+Merged 30-client rows written to byzantine_detection_results_merged.csv (150 rows, 30 flagged, 50 rows attack-evaluated)
 Summary plot written to byzantine_detection_summary.png
-Total runtime: 39.51s
+Total runtime: 14.05s
 
 Client-level summary:
   client=1 severity=0.00 truth=0 method_detected=0 naive_detected=1
