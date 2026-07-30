@@ -1,0 +1,25 @@
+FedProx vs Vanilla vs Shapley-weighted FedAvg (UCI HAR)
+=======================================================
+clients=30  rounds=5  local_epochs=3  lr=0.01  beta=50  mu(FedProx)=0.1  seed=42
+
+round   vanilla   shapley   fedprox
+  0    0.1114   0.1114   0.1114
+  1    0.5140   0.5333   0.5149
+  2    0.5386   0.5439   0.5381
+  3    0.6201   0.6943   0.6157
+  4    0.7093   0.7247   0.7073
+  5    0.7420   0.7411   0.7411
+
+Final  vanilla=0.7420  shapley=0.7411  fedprox=0.7411
+Shapley - FedProx (final): +0.0000
+Shapley - Vanilla (final): -0.0010
+
+Convergence speed (first round reaching target accuracy):
+  target   vanilla   shapley   fedprox
+  >=0.50        1         1         1
+  >=0.60        3         3         3
+  >=0.70        4         4         4
+
+Note: FedProx modifies the CLIENT objective (proximal term toward the global model); server aggregation stays size-weighted like vanilla. It is a client-drift / stability baseline for non-IID data, complementary to contribution-based reweighting. On the honest, mildly non-IID 30-subject HAR partition (every client holds all 6 classes), FedProx is expected to track vanilla closely; the proximal term matters more under stronger skew.
+
+(run time 37.0s)

@@ -1,0 +1,15 @@
+Jain's Fairness Index on Shapley aggregation weights
+=======================================================
+J = (sum w_i)^2 / (n * sum w_i^2)
+Range: 1/n (one client dominates) .. 1.0 (perfectly equal)
+
+Round 1: J = 0.8824  (n = 30, floor = 0.0333)
+Round 2: J = 0.9896  (n = 30, floor = 0.0333)
+Round 3: J = 0.8314  (n = 30, floor = 0.0333)
+Round 4: J = 0.9226  (n = 30, floor = 0.0333)
+Round 5: J = 0.9896  (n = 30, floor = 0.0333)
+
+Mean J across rounds : 0.9231
+Pooled J (all rows)  : 0.9189
+
+Interpretation: J near 1.0 means the Shapley-derived weights are spread evenly across the 30 HAR clients; a lower J means a few clients dominate the aggregate. Track this alongside accuracy to show fairness is preserved while weighting by contribution.
