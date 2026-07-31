@@ -1,0 +1,16 @@
+{
+  "name": "p4-shapley-audit",
+  "version": "1.0.0",
+  "description": "P4: Blockchain audit trail for ShapleyFL byzantine-detection output",
+  "scripts": {
+    "compile": "hardhat compile",
+    "node": "hardhat node",
+    "deploy": "hardhat run scripts/deploy.js --network localhost",
+    "log": "hardhat run scripts/logResults.js --network localhost",
+    "demo": "hardhat run scripts/enforcement_demo.js --network localhost"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.22.0"
+  }
+}
