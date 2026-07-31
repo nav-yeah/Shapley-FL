@@ -88,7 +88,7 @@ def train_subcoalition_fl(client_ids_subset, data, n_rounds,
 
 
 def gtg_shapley_full_trajectory(client_ids, data, X_test, y_test,
-                                 n_rounds=5, n_permutations=N_PERMUTATIONS,
+                                 n_rounds=50, n_permutations=N_PERMUTATIONS,
                                  m=M_GUIDED, eps_b=EPSILON_B, eps_i=EPSILON_I,
                                  global_seed=GLOBAL_SEED, seed=RANDOM_SEED,
                                  verbose=True):

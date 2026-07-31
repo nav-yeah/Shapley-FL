@@ -35,7 +35,7 @@ SCENARIO_DIR = "scenarios"
 OUT_CSV = "scenario_results.csv"
 GLOBAL_SEED = 42
 RANDOM_SEED = 42
-N_ROUNDS = 5
+N_ROUNDS = 50
 
 EPSILON_B = 0.02
 EPSILON_I = 0.005
