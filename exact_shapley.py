@@ -29,7 +29,7 @@ from fl_utils import (
 
 PKL_PATH = "preprocessed/har_clients.pkl"
 N_CLIENTS_FOR_GROUND_TRUTH = 5
-N_ROUNDS = 5            # FL rounds per coalition evaluation
+N_ROUNDS = 50            # FL rounds per coalition evaluation
 GLOBAL_SEED = 42
 RANDOM_SEED = 42
 

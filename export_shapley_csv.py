@@ -44,7 +44,7 @@ PKL_PATH = "preprocessed/har_clients.pkl"
 OUT_CSV = "shapley_scores.csv"
 RANDOM_SEED = 42
 GLOBAL_SEED = 42
-N_ROUNDS = 5
+N_ROUNDS = 50
 
 EPSILON_B = 0.02
 EPSILON_I = 0.005
