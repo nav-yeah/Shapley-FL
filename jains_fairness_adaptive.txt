@@ -1,0 +1,62 @@
+Jain's Fairness Index on Shapley aggregation weights
+============================================================
+J = (sum w_i)^2 / (n * sum w_i^2)
+Range: 0.0333 (one client dominates) .. 1.0 (perfectly equal)
+Source: aggregation_results_adaptive.csv  (50 rounds, 30 clients)
+Truncation: truncation flags read from aggregation_round_log_adaptive.csv
+
+HEADLINE — Shapley-live rounds only
+------------------------------------------------------------
+  live rounds        : 24/50 (48%)
+  mean J (live)      : 0.8897
+  min / max J (live) : 0.7528 / 0.9819
+  std  J (live)      : 0.0595
+  live round numbers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 24, 30, 31, 41, 43]
+
+Reference — GTG-truncated rounds (size-weight fallback)
+------------------------------------------------------------
+  truncated rounds   : 26/50 (52%)
+  mean J (truncated) : 0.9896
+  These rounds use size-proportional FedAvg weights, so their J measures
+  how evenly HAR client sizes are distributed — not anything about Shapley.
+  Treat this as the vanilla-FedAvg reference point.
+
+Pooled / legacy figures
+------------------------------------------------------------
+  mean J across ALL rounds : 0.9417
+  pooled J (all rows)      : 0.9369
+  Note: the all-rounds mean mixes Shapley-weighted and size-weighted rounds and
+  is dominated by whichever group is larger. Quote the live-round mean instead.
+
+Per-round detail
+------------------------------------------------------------
+  (50 rounds — full table in jains_fairness_adaptive.csv; live rounds listed below)
+  Round   1: J = 0.8159
+  Round   2: J = 0.8288
+  Round   3: J = 0.7528
+  Round   4: J = 0.9000
+  Round   5: J = 0.8589
+  Round   6: J = 0.9142
+  Round   7: J = 0.8292
+  Round   8: J = 0.8160
+  Round   9: J = 0.8452
+  Round  10: J = 0.9116
+  Round  11: J = 0.8793
+  Round  12: J = 0.8900
+  Round  13: J = 0.8804
+  Round  14: J = 0.8384
+  Round  15: J = 0.8745
+  Round  17: J = 0.9183
+  Round  18: J = 0.9118
+  Round  19: J = 0.9428
+  Round  21: J = 0.8925
+  Round  24: J = 0.9537
+  Round  30: J = 0.9640
+  Round  31: J = 0.9762
+  Round  41: J = 0.9769
+  Round  43: J = 0.9819
+
+Interpretation: within the rounds where Shapley weighting is actually active, J
+near 1.0 means the contribution-derived weights stay spread across the 30 HAR
+clients rather than collapsing onto a few dominant ones — i.e. the method
+reweights by contribution without starving anyone out of the aggregate.

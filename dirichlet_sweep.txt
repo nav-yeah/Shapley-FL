@@ -1,0 +1,17 @@
+Dirichlet alpha sweep — non-IID severity
+============================================================
+clients=30  beta=10  seed=42
+GTG truncation: adaptive, eps_b=0.0035
+
+  alpha   n_rounds  vanilla_final  weighted_final  gap_final   gap_plateau  truncated
+  0.1           50         0.8230          0.8828    +0.0598      +0.0476     4/50
+  0.5           50         0.9045          0.9089    +0.0043      +0.0029    19/50
+  1             50         0.8959          0.8968    +0.0010      +0.0015    10/50
+
+gap_plateau = mean(weighted) - mean(vanilla) over the last 10 rounds.
+It is the number to quote: after convergence a single final round is noisy
+enough to flip the sign of the gap.
+
+Reading the truncated column: in a truncated round the weighted arm ran plain
+size-proportional FedAvg, so a small gap at high truncation counts means the
+method was mostly switched off, not that it made no difference.

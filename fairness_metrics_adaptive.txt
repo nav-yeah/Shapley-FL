@@ -1,31 +1,31 @@
 P2 — Shapley-weighted FedAvg vs vanilla FedAvg
 =======================================================
 Config: BETA=50, WARMUP_ROUNDS=0, N_ROUNDS=50, seed=42
-GTG truncation: fixed (P1 defaults), eps_b=0.02, eps_i=0.005
+GTG truncation: adaptive, eps_b=0.0035, eps_i=0.000875
 Dataset: UCI HAR, 30 clients, 2074 global test samples
-Runtime: 3m59s
+Runtime: 11m26s
 
 Accuracy summary (final-round alone is noisy after convergence):
-  final round 50      vanilla=0.8881  weighted=0.8877  gap=-0.0005
-  mean of last 10 rounds vanilla=0.8865  weighted=0.8864  gap=-0.0001
-  best round          vanilla=0.8896 (r43)  weighted=0.8891 (r43)
+  final round 50      vanilla=0.8881  weighted=0.8872  gap=-0.0010
+  mean of last 10 rounds vanilla=0.8865  weighted=0.8863  gap=-0.0002
+  best round          vanilla=0.8896 (r43)  weighted=0.8886 (r47)
 
 GTG-Shapley truncation statistics
 ---------------------------------
-  mode: fixed (P1 defaults)   eps_b=0.02  eps_i=0.005
-  truncated (all-phi-zero, size-weight fallback) rounds: 41/50 (82%)
-  Shapley-live rounds: 9/50 (18%)
-  signal collapses permanently from round 22 onward (every round from there is truncated)
-  truncated round list: [2, 5, 7, 10, 11, 12, 13, 14, 16, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34] ...
+  mode: adaptive   eps_b=0.0035  eps_i=0.000875
+  truncated (all-phi-zero, size-weight fallback) rounds: 26/50 (52%)
+  Shapley-live rounds: 24/50 (48%)
+  signal collapses permanently from round 44 onward (every round from there is truncated)
+  truncated round list: [16, 20, 22, 23, 25, 26, 27, 28, 29, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 44, 45, 46, 47, 48, 49] ...
   NOTE for P3: a truncated round is a NO-SIGNAL round, not a round in which every client contributed nothing. Exclude these rounds from eligible-round counts before applying the sustained-deviation ratio.
 
 Convergence speed (first round reaching target accuracy):
   target   vanilla   weighted
   >=0.50        1         1
   >=0.60        3         3
-  >=0.70        4         4
-  >=0.80        8         8
-  >=0.85       15        15
+  >=0.70        4         3
+  >=0.80        8         7
+  >=0.85       15        10
   >=0.90        -         -
 
 ShapFed-style fairness metric (Pearson correlation between
@@ -33,8 +33,8 @@ standalone client accuracy on the global test set and the
 credit signal each scheme assigns):
 
   vanilla FedAvg (credit = data size):        r = -0.0548
-  per-round Shapley values (cumulative phi):  r = +0.1174
-  Shapley-softmax aggregation weights:        r = -0.0191
+  per-round Shapley values (cumulative phi):  r = +0.1275
+  Shapley-softmax aggregation weights:        r = +0.0551
 
   Caveat: with most rounds truncated, cumulative phi and the
   aggregation weights are both dominated by the few live rounds,
@@ -42,4 +42,4 @@ credit signal each scheme assigns):
   the round count suggests.
 
 Per-round accuracy (vanilla):  0.1114, 0.5140, 0.5386, 0.6201, 0.7093, 0.7420, 0.7642, 0.7695, 0.8134, 0.7975, 0.8327, 0.8327, 0.8332, 0.8356, 0.8221, 0.8515, 0.8563, 0.8173, 0.8370, 0.8525, 0.8684, 0.8419, 0.8635, 0.8660, 0.8554, 0.8674, 0.8693, 0.8713, 0.8669, 0.8708, 0.8660, 0.8727, 0.8742, 0.8737, 0.8751, 0.8756, 0.8799, 0.8756, 0.8761, 0.8766, 0.8756, 0.8828, 0.8828, 0.8896, 0.8852, 0.8852, 0.8872, 0.8886, 0.8886, 0.8862, 0.8881
-Per-round accuracy (weighted): 0.1114, 0.5333, 0.5439, 0.6943, 0.7247, 0.7411, 0.7748, 0.7681, 0.8419, 0.8380, 0.8317, 0.8327, 0.8317, 0.8346, 0.8216, 0.8582, 0.8582, 0.8370, 0.8361, 0.8505, 0.8655, 0.8563, 0.8626, 0.8660, 0.8568, 0.8669, 0.8689, 0.8708, 0.8679, 0.8713, 0.8660, 0.8727, 0.8732, 0.8732, 0.8756, 0.8770, 0.8804, 0.8775, 0.8766, 0.8775, 0.8751, 0.8828, 0.8824, 0.8891, 0.8852, 0.8857, 0.8867, 0.8886, 0.8881, 0.8872, 0.8877
+Per-round accuracy (weighted): 0.1114, 0.5419, 0.5767, 0.7078, 0.7242, 0.7686, 0.7850, 0.8317, 0.8491, 0.8462, 0.8534, 0.8534, 0.8510, 0.8539, 0.8573, 0.8582, 0.8582, 0.8438, 0.8549, 0.8631, 0.8655, 0.8616, 0.8616, 0.8650, 0.8664, 0.8679, 0.8674, 0.8708, 0.8674, 0.8708, 0.8684, 0.8737, 0.8732, 0.8722, 0.8742, 0.8766, 0.8799, 0.8775, 0.8770, 0.8780, 0.8756, 0.8833, 0.8828, 0.8881, 0.8848, 0.8857, 0.8872, 0.8886, 0.8881, 0.8867, 0.8872
