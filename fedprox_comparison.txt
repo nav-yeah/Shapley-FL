@@ -1,0 +1,40 @@
+FedProx vs Vanilla vs Shapley-weighted FedAvg (UCI HAR)
+============================================================
+clients=30  rounds=50  local_epochs=3  lr=0.01  beta=50  mu(FedProx)=0.1  seed=42
+GTG truncation: fixed (P1 defaults), eps_b=0.02, eps_i=0.005
+Runtime: 5m07s
+
+Accuracy summary
+------------------------------------------------------------
+  final round 50      vanilla=0.8881  shapley=0.8877  fedprox=0.8877
+  mean last 10 rounds  vanilla=0.8865  shapley=0.8864  fedprox=0.8861
+  best round         vanilla=0.8896  shapley=0.8891  fedprox=0.8896
+
+  Shapley - FedProx (final): +0.0000   (plateau: +0.0003)
+  Shapley - Vanilla (final): -0.0005   (plateau: -0.0001)
+  FedProx - Vanilla (final): -0.0005   (plateau: -0.0004)
+
+Shapley arm truncation
+------------------------------------------------------------
+  truncated rounds: 41/50 (82%) — in these the Shapley arm ran plain size-weighted FedAvg.
+  Shapley-live rounds: 9/50
+  WARNING: the Shapley arm was inactive for most of the run, so its curve is
+  close to vanilla by construction. Re-run with --adaptive for a comparison
+  in which the method is actually operating.
+
+Convergence speed (first round reaching target accuracy):
+  target   vanilla   shapley   fedprox
+  >=0.50        1         1         1
+  >=0.60        3         3         3
+  >=0.70        4         4         4
+  >=0.80        8         8         8
+  >=0.85       15        15        15
+  >=0.90        -         -         -
+
+Note: FedProx modifies the CLIENT objective (proximal term toward the global
+model); server aggregation stays size-weighted like vanilla. It is a client-
+drift / stability baseline for non-IID data, complementary to contribution-
+based reweighting. On the honest, mildly non-IID 30-subject HAR partition
+(every client holds all 6 classes), FedProx is expected to track vanilla
+closely; the proximal term matters more under stronger skew — see
+dirichlet_alpha_sweep.py.

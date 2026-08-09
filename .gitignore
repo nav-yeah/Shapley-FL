@@ -1,7 +1,6 @@
-@"
-venv/
-__pycache__/
-data/
-preprocessed/
-*.pyc
-"@ | Out-File -Encoding utf8 .gitignore
+venv/ 
+__pycache__/ 
+*.pkl 
+*.pyc 
+preprocessed/ 
+data/ 

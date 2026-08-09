@@ -14,6 +14,14 @@ to be modified. It does three things:
 Outputs:
   - byzantine_detection_results.csv
   - byzantine_detection_metrics.txt
+  - byzantine_scenario4_flagged.csv          (P4 handoff: scenario_4 run
+    with real injected attacks, 10 clients / 50 rows)
+  - byzantine_detection_results_merged.csv   (P4 handoff: full 30-client /
+    150-row file, with the 10 scenario_4 clients' real evaluated results
+    overlaid on the clean baseline for the other 20. See the
+    `evaluated_for_attack` column — only rows with 1 were actually tested
+    against an injected attack; rows with 0 are untested, not "tested
+    and clean".)
 
 The detector is tuned on the real clean per-round ranges in
 shapley_scores.csv, and the evaluation uses the genuine scenario_4 noisy
@@ -29,6 +37,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
@@ -51,10 +60,13 @@ SCENARIO_PATH = Path("scenarios") / "scenario_4_noisy_labels.pkl"
 OUT_CSV = Path("byzantine_detection_results.csv")
 OUT_TXT = Path("byzantine_detection_metrics.txt")
 OUT_PNG = Path("byzantine_detection_summary.png")
+OUT_SCENARIO_CSV = Path("byzantine_scenario4_flagged.csv")
+OUT_MERGED_CSV = Path("byzantine_detection_results_merged.csv")
+OUT_ATTACK_SWEEP_CSV = Path("p3_attack_sweep.csv")
 
 GLOBAL_SEED = 42
 RANDOM_SEED = 42
-N_ROUNDS = 5
+N_ROUNDS = 50
 
 N_PERMUTATIONS = 200
 EPSILON_B = 0.02
@@ -78,6 +90,44 @@ SEVERITY_BY_POSITION = [0.0, 0.0, 0.05, 0.05, 0.10, 0.10, 0.15, 0.15, 0.20, 0.20
 class Thresholds:
     round_means: dict
     round_stds: dict
+
+
+def identify_live_rounds(df: pd.DataFrame) -> dict[int, bool]:
+    if "round" not in df.columns or "shapley_value" not in df.columns:
+        raise ValueError("Expected 'round' and 'shapley_value' columns")
+
+    live_rounds = {}
+    for round_number, round_frame in df.groupby("round"):
+        values = round_frame["shapley_value"].to_numpy(dtype=float)
+        live_rounds[int(round_number)] = bool(not np.allclose(values, 0.0))
+    return live_rounds
+
+
+def build_sustain_flags(
+    anomalies: list[bool],
+    live_mask: list[bool],
+    sustain_ratio: float,
+) -> list[bool]:
+    live_rounds = [is_live for is_live in live_mask if is_live]
+    if not live_rounds:
+        return [False] * len(anomalies)
+
+    sustain_count = max(1, int(np.ceil(sustain_ratio * len(live_rounds))))
+    flags = [False] * len(anomalies)
+    cumulative_anomalies = 0
+    is_client_flagged = False
+
+    for index, (is_anomalous, is_live) in enumerate(zip(anomalies, live_mask)):
+        if not is_live:
+            continue
+
+        if is_anomalous:
+            cumulative_anomalies += 1
+        if cumulative_anomalies >= sustain_count:
+            is_client_flagged = True
+        flags[index] = bool(is_client_flagged)
+
+    return flags
 
 
 def load_client_data(pkl_path: Path):
@@ -227,22 +277,35 @@ def load_detection_series(detection_csv: Path):
     required = {"round", "client_id", "shapley_value"}
     missing = required - set(df.columns)
     if missing:
-        raise ValueError(f"Missing required columns in {detection_csv}: {sorted(missing)}")
+        raise ValueError(
+            f"Missing required columns in {detection_csv}: {sorted(missing)}"
+        )
     df = df.sort_values(["client_id", "round"]).reset_index(drop=True)
     return df
 
 
-def rolling_window_features(values: np.ndarray, window_size: int, round_numbers=None,
-                            round_means=None, round_stds=None):
+def rolling_window_features(
+    values: np.ndarray,
+    window_size: int,
+    round_numbers=None,
+    round_means=None,
+    round_stds=None,
+):
     records = []
     for index in range(len(values)):
         round_number = index + 1
         current = float(values[index])
 
         if index + 1 < window_size:
-            if round_numbers is not None and round_means is not None and round_stds is not None:
+            if (
+                round_numbers is not None
+                and round_means is not None
+                and round_stds is not None
+            ):
                 round_number = int(round_numbers[index])
-                z_score = (current - round_means[round_number]) / (round_stds[round_number] + 1e-6)
+                z_score = (current - round_means[round_number]) / (
+                    round_stds[round_number] + 1e-6
+                )
             else:
                 z_score = 0.0
             records.append(
@@ -265,9 +328,15 @@ def rolling_window_features(values: np.ndarray, window_size: int, round_numbers=
         # Avoid unstable slope inflation when the window mean is near zero.
         normalized_slope = slope / max(abs(window_mean), SLOPE_DENOM_FLOOR)
 
-        if round_numbers is not None and round_means is not None and round_stds is not None:
+        if (
+            round_numbers is not None
+            and round_means is not None
+            and round_stds is not None
+        ):
             round_number = int(round_numbers[index])
-            z_score = (current - round_means[round_number]) / (round_stds[round_number] + 1e-6)
+            z_score = (current - round_means[round_number]) / (
+                round_stds[round_number] + 1e-6
+            )
         else:
             z_score = 0.0
 
@@ -296,13 +365,22 @@ def calibrate_thresholds(baseline_df: pd.DataFrame, window_size: int):
     return Thresholds(round_means=round_means, round_stds=round_stds)
 
 
-def apply_detector(df: pd.DataFrame, thresholds: Thresholds, window_size: int, sustain_ratio: float):
+def apply_detector(
+    df: pd.DataFrame,
+    thresholds: Thresholds,
+    window_size: int,
+    sustain_ratio: float,
+    live_rounds: dict[int, bool] | None = None,
+):
     output_rows = []
+    if live_rounds is None:
+        live_rounds = identify_live_rounds(df)
 
     for client_id, client_frame in df.groupby("client_id"):
         client_frame = client_frame.sort_values("round").reset_index(drop=True)
         values = client_frame["shapley_value"].to_numpy(dtype=float)
         round_numbers = client_frame["round"].to_numpy(dtype=int)
+        live_mask = [bool(live_rounds.get(int(round_number), False)) for round_number in round_numbers]
         feature_rows = rolling_window_features(
             values,
             window_size,
@@ -317,28 +395,27 @@ def apply_detector(df: pd.DataFrame, thresholds: Thresholds, window_size: int, s
             if index + 1 < TEMPORAL_Z_WINDOW:
                 temporal_z_scores.append(current_z)
             else:
-                window_scores = [row["z_score"] for row in feature_rows[max(0, index - TEMPORAL_Z_WINDOW + 1): index + 1]]
+                window_scores = [
+                    row["z_score"]
+                    for row in feature_rows[
+                        max(0, index - TEMPORAL_Z_WINDOW + 1) : index + 1
+                    ]
+                ]
                 temporal_z_scores.append(float(np.mean(window_scores)))
 
         method_flags = []
         naive_flags = []
         for index, feature_row in enumerate(feature_rows):
+            is_live = bool(live_mask[index])
             single_round_z = feature_row["z_score"]
-            naive_flags.append(abs(single_round_z) >= TEMPORAL_Z_THRESHOLD)
-            method_flags.append(abs(temporal_z_scores[index]) >= TEMPORAL_Z_THRESHOLD)
+            naive_flag = bool(abs(single_round_z) >= TEMPORAL_Z_THRESHOLD and is_live)
+            method_flag = bool(abs(temporal_z_scores[index]) >= TEMPORAL_Z_THRESHOLD and is_live)
+            naive_flags.append(naive_flag)
+            method_flags.append(method_flag)
 
-        eligible_rounds = len(feature_rows)
-        sustain_count = max(1, int(np.ceil(sustain_ratio * eligible_rounds)))
-
-        sustained_flags = [False] * len(method_flags)
-        cumulative_anomalies = 0
-        is_client_flagged = False
-        for index, is_anomalous in enumerate(method_flags):
-            if is_anomalous:
-                cumulative_anomalies += 1
-            if cumulative_anomalies >= sustain_count:
-                is_client_flagged = True
-            sustained_flags[index] = bool(is_client_flagged)
+        sustained_flags = build_sustain_flags(
+            method_flags, live_mask, sustain_ratio
+        )
 
         for index, feature_row in enumerate(feature_rows):
             output_rows.append(
@@ -384,6 +461,72 @@ def precision_recall_f1(y_true, y_pred):
     }
 
 
+def robust_flag_from_scores(scores: np.ndarray, client_ids: list[int], lower_is_better: bool = False) -> set[int]:
+    scores = np.asarray(scores, dtype=float)
+    median = float(np.median(scores))
+    mad = float(np.median(np.abs(scores - median)))
+    threshold = max(1e-6, 3.0 * mad)
+    flagged = set()
+    for client_id, score in zip(client_ids, scores):
+        if lower_is_better:
+            is_outlier = score < median - threshold
+        else:
+            is_outlier = score > median + threshold
+        if is_outlier:
+            flagged.add(int(client_id))
+    return flagged
+
+
+def compute_krum_baseline(attack_df: pd.DataFrame, client_ids: list[int], expected_outliers: int) -> set[int]:
+    vectors = []
+    for client_id in client_ids:
+        client_series = attack_df.loc[attack_df["client_id"] == client_id, "shapley_value"].to_numpy(dtype=float)
+        vectors.append(client_series)
+
+    matrix = np.vstack(vectors)
+    n_clients = len(client_ids)
+    n_neighbors = max(1, min(n_clients - 1, n_clients - expected_outliers - 1))
+    scores = []
+    for idx in range(n_clients):
+        distances = np.sum((matrix - matrix[idx]) ** 2, axis=1)
+        nearest = np.sort(distances)[1 : n_neighbors + 1]
+        scores.append(float(np.sum(nearest)))
+    return robust_flag_from_scores(np.asarray(scores), client_ids, lower_is_better=False)
+
+
+def compute_fltrust_baseline(
+    attack_df: pd.DataFrame, client_ids: list[int], expected_outliers: int
+) -> set[int]:
+    """FLTrust-style baseline: compute cosine similarity to a median reference
+    vector and flag the bottom-`expected_outliers` clients by similarity.
+
+    Using a bottom-k rule avoids MAD-based thresholds that can fall outside
+    the [-1, 1] cosine range when many dimensions are zero/truncated.
+    """
+    vectors = []
+    for client_id in client_ids:
+        client_series = attack_df.loc[attack_df["client_id"] == client_id, "shapley_value"].to_numpy(dtype=float)
+        vectors.append(client_series)
+
+    matrix = np.vstack(vectors)
+    reference = np.median(matrix, axis=0)
+    similarities = []
+    for idx in range(len(client_ids)):
+        candidate = matrix[idx]
+        norm = np.linalg.norm(candidate) * np.linalg.norm(reference)
+        if norm < 1e-12:
+            similarity = 0.0
+        else:
+            similarity = float(np.dot(candidate, reference) / norm)
+        similarities.append((int(client_ids[idx]), similarity))
+
+    # Flag the bottom-k clients by similarity (lowest cosine with reference).
+    k = max(1, int(expected_outliers))
+    sorted_by_sim = sorted(similarities, key=lambda x: x[1])
+    flagged = {cid for cid, _ in sorted_by_sim[:k]}
+    return flagged
+
+
 def row_level_metrics(result_df: pd.DataFrame, client_ids, window_size: int):
     client_to_position = {cid: position for position, cid in enumerate(client_ids)}
     eligible = result_df[result_df["round"] >= window_size].copy()
@@ -393,6 +536,94 @@ def row_level_metrics(result_df: pd.DataFrame, client_ids, window_size: int):
     method = precision_recall_f1(eligible["ground_truth"], eligible["flagged_status"])
     naive = precision_recall_f1(eligible["ground_truth"], eligible["raw_anomaly"])
     return method, naive, eligible
+
+
+def build_attack_sweep(
+    baseline_df: pd.DataFrame,
+    thresholds: Thresholds,
+    window_size: int,
+    sustain_ratio: float,
+    ratios=(0.2, 0.3),
+    live_rounds: dict[int, bool] | None = None,
+):
+    rows = []
+    client_ids = sorted(baseline_df["client_id"].astype(int).unique())
+
+    for ratio in ratios:
+        rng = np.random.RandomState(42 + int(ratio * 100))
+        attacked_clients = sorted(
+            rng.choice(client_ids, size=max(1, int(round(len(client_ids) * ratio))), replace=False).tolist()
+        )
+        attack_df = baseline_df.copy()
+        attack_df = attack_df.sort_values(["client_id", "round"]).reset_index(drop=True)
+        attack_shift = max(0.01, 0.5 * float(np.std(attack_df["shapley_value"].to_numpy(dtype=float))))
+
+        for client_id in attacked_clients:
+            mask = (attack_df["client_id"] == client_id) & (attack_df["round"] >= 10)
+            attack_df.loc[mask, "shapley_value"] = (
+                attack_df.loc[mask, "shapley_value"].to_numpy(dtype=float) + attack_shift
+            )
+
+        detection_df = apply_detector(
+            attack_df,
+            thresholds,
+            window_size,
+            sustain_ratio,
+            live_rounds=live_rounds,
+        )
+        client_flags = (
+            detection_df.groupby("client_id")["flagged_status"].max().rename("flagged")
+        )
+        flagged_clients = set(client_flags[client_flags == 1].index.tolist())
+        true_clients = set(attacked_clients)
+
+        time_to_detection = []
+        for client_id in attacked_clients:
+            flagged_rounds = detection_df[(detection_df["client_id"] == client_id) & (detection_df["flagged_status"] == 1)]
+            if flagged_rounds.empty:
+                time_to_detection.append(float("nan"))
+            else:
+                time_to_detection.append(float(flagged_rounds["round"].min()))
+
+        method_metrics = precision_recall_f1(
+            np.array([1 if cid in true_clients else 0 for cid in client_ids], dtype=int),
+            np.array([1 if cid in flagged_clients else 0 for cid in client_ids], dtype=int),
+        )
+
+        # Krum-style and FLTrust-style baselines for comparison against the detector.
+        expected_outliers = max(1, int(round(len(client_ids) * ratio)))
+        krum_flagged = compute_krum_baseline(attack_df, client_ids, expected_outliers)
+        fltrust_flagged = compute_fltrust_baseline(attack_df, client_ids, expected_outliers)
+
+        krum_metrics = precision_recall_f1(
+            np.array([1 if cid in true_clients else 0 for cid in client_ids], dtype=int),
+            np.array([1 if cid in krum_flagged else 0 for cid in client_ids], dtype=int),
+        )
+        fltrust_metrics = precision_recall_f1(
+            np.array([1 if cid in true_clients else 0 for cid in client_ids], dtype=int),
+            np.array([1 if cid in fltrust_flagged else 0 for cid in client_ids], dtype=int),
+        )
+
+        rows.append(
+            {
+                "attacker_ratio": float(ratio),
+                "attacked_client_count": int(len(attacked_clients)),
+                "detected_client_count": int(len(flagged_clients)),
+                "method_precision": method_metrics["precision"],
+                "method_recall": method_metrics["recall"],
+                "method_f1": method_metrics["f1"],
+                "krum_precision": krum_metrics["precision"],
+                "krum_recall": krum_metrics["recall"],
+                "krum_f1": krum_metrics["f1"],
+                "fltrust_precision": fltrust_metrics["precision"],
+                "fltrust_recall": fltrust_metrics["recall"],
+                "fltrust_f1": fltrust_metrics["f1"],
+                "mean_time_to_detection": float(np.nanmean(time_to_detection)) if len(time_to_detection) else np.nan,
+                "median_time_to_detection": float(np.nanmedian(time_to_detection)) if len(time_to_detection) else np.nan,
+            }
+        )
+
+    return pd.DataFrame(rows)
 
 
 def client_level_metrics(result_df: pd.DataFrame, client_ids):
@@ -445,8 +676,18 @@ def plot_severity_summary(severity_df: pd.DataFrame):
     x = np.arange(len(severity_df))
     width = 0.36
 
-    ax.bar(x - width / 2, severity_df["method_recall"], width, label="Sustained drift detector")
-    ax.bar(x + width / 2, severity_df["naive_recall"], width, label="Naive single-round threshold")
+    ax.bar(
+        x - width / 2,
+        severity_df["method_recall"],
+        width,
+        label="Sustained drift detector",
+    )
+    ax.bar(
+        x + width / 2,
+        severity_df["naive_recall"],
+        width,
+        label="Naive single-round threshold",
+    )
 
     ax.set_xticks(x)
     ax.set_xticklabels([f"{sev:.2f}" for sev in severity_df["severity"]])
@@ -486,20 +727,143 @@ def main():
     start = time.time()
     baseline_df = load_baseline_series(BASELINE_CSV)
     thresholds = calibrate_thresholds(baseline_df, WINDOW_SIZE)
+    baseline_live_rounds = identify_live_rounds(baseline_df)
 
     # Deliverable CSV for P4: run detector over the full 30-client handoff file.
     detection_df = load_detection_series(DETECTION_INPUT_CSV)
-    deliverable_df = apply_detector(detection_df, thresholds, WINDOW_SIZE, MIN_SUSTAINED_RATIO)
-    output_df = deliverable_df.drop(columns=["raw_anomaly"]).sort_values(["round", "client_id"])
+    deliverable_df = apply_detector(
+        detection_df,
+        thresholds,
+        WINDOW_SIZE,
+        MIN_SUSTAINED_RATIO,
+        live_rounds=baseline_live_rounds,
+    )
+    output_df = deliverable_df.drop(columns=["raw_anomaly"]).sort_values(
+        ["round", "client_id"]
+    )
     output_df.to_csv(OUT_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
 
     # Evaluation with known labels: run on scenario_4_noisy_labels (10 clients).
     scenario_df, client_ids = run_scenario_rounds(SCENARIO_PATH)
-    metrics_df = apply_detector(scenario_df, thresholds, WINDOW_SIZE, MIN_SUSTAINED_RATIO)
-    method_metrics, naive_metrics, eligible_df = row_level_metrics(metrics_df, client_ids, WINDOW_SIZE)
+    attack_sweep_df = build_attack_sweep(
+        detection_df,
+        thresholds,
+        WINDOW_SIZE,
+        MIN_SUSTAINED_RATIO,
+        live_rounds=baseline_live_rounds,
+    )
+    attack_sweep_df.to_csv(OUT_ATTACK_SWEEP_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
+    metrics_df = apply_detector(
+        scenario_df,
+        thresholds,
+        WINDOW_SIZE,
+        MIN_SUSTAINED_RATIO,
+        live_rounds=baseline_live_rounds,
+    )
+    method_metrics, naive_metrics, eligible_df = row_level_metrics(
+        metrics_df, client_ids, WINDOW_SIZE
+    )
     client_summary = client_level_metrics(metrics_df, client_ids)
     severity_df = severity_summary(client_summary)
     plot_severity_summary(severity_df)
+
+    # ------------------------------------------------------------------
+    # NEW (added for P4): export the scenario_4 run — which has real
+    # injected attacks and real flagged_status=1 rows — as its own CSV.
+    # metrics_df doesn't carry shapley_value (apply_detector only outputs
+    # detector features), so merge it back in from scenario_df first.
+    # ------------------------------------------------------------------
+    scenario_flagged_df = metrics_df.drop(columns=["raw_anomaly"]).merge(
+        scenario_df[["round", "client_id", "shapley_value"]],
+        on=["round", "client_id"],
+        how="left",
+    )
+    scenario_flagged_df = (
+        scenario_flagged_df[
+            [
+                "round",
+                "client_id",
+                "shapley_value",
+                "flagged_status",
+                "rolling_variance",
+                "trend_slope",
+                "z_score",
+            ]
+        ]
+        .sort_values(["round", "client_id"])
+        .reset_index(drop=True)
+    )
+    scenario_flagged_df.to_csv(OUT_SCENARIO_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
+
+    # ------------------------------------------------------------------
+    # NEW (added for P4): a 150-row (30-client) file for P4's full-scale
+    # ledger, with the 10 scenario_4 clients' REAL evaluated detection
+    # results overlaid on top of the clean 30-client baseline.
+    #
+    # IMPORTANT — this does NOT mean all 30 clients were attack-tested.
+    # Only the 10 scenario_4 clients (real client IDs: see
+    # scenario_client_ids below) were actually run against injected
+    # attacks. The other 20 clients' flagged_status=0 reflects that they
+    # were never evaluated for attacks in this run, same as in
+    # byzantine_detection_results.csv — it is not a claim they were
+    # tested and found clean. An `evaluated_for_attack` column marks
+    # this distinction explicitly so downstream consumers (P4, the
+    # paper) don't misread coverage.
+    # ------------------------------------------------------------------
+    scenario_client_ids = set(
+        int(c) for c in client_ids
+    )  # the 10 real scenario_4 clients
+
+    merged_df = deliverable_df.copy()  # the 150-row clean-baseline detector output
+    merged_df["evaluated_for_attack"] = (
+        merged_df["client_id"].isin(scenario_client_ids).astype(int)
+    )
+
+    # Merge shapley_value onto the baseline rows so the merged file has it too.
+    merged_df = merged_df.merge(
+        detection_df[["round", "client_id", "shapley_value"]],
+        on=["round", "client_id"],
+        how="left",
+    )
+
+    # Overlay the real scenario_4 detector results for the 10 evaluated clients.
+    overlay = scenario_flagged_df.copy()
+    overlay["evaluated_for_attack"] = 1
+    overlay_indexed = overlay.set_index(["round", "client_id"])
+
+    merged_indexed = merged_df.set_index(["round", "client_id"])
+    overlay_cols = [
+        "shapley_value",
+        "flagged_status",
+        "rolling_variance",
+        "trend_slope",
+        "z_score",
+    ]
+    for col in overlay_cols:
+        merged_indexed.loc[overlay_indexed.index, col] = overlay_indexed[col]
+    merged_indexed.loc[overlay_indexed.index, "evaluated_for_attack"] = 1
+
+    merged_df = merged_indexed.reset_index()
+    merged_df = (
+        merged_df[
+            [
+                "round",
+                "client_id",
+                "shapley_value",
+                "flagged_status",
+                "rolling_variance",
+                "trend_slope",
+                "z_score",
+                "evaluated_for_attack",
+            ]
+        ]
+        .sort_values(["round", "client_id"])
+        .reset_index(drop=True)
+    )
+    merged_df.to_csv(OUT_MERGED_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
+    # ------------------------------------------------------------------
+    # END NEW
+    # ------------------------------------------------------------------
 
     lines = [
         "P3 Byzantine detection via score drift",
@@ -511,6 +875,7 @@ def main():
         f"Slope normalization floor: {SLOPE_DENOM_FLOOR:.2f}",
         f"Window behavior: rolling_variance/trend_slope are NaN for rounds < {WINDOW_SIZE} by design.",
         f"Eligible rows for row-level metrics: {len(eligible_df)}",
+        f"Attack-sweep results written to {OUT_ATTACK_SWEEP_CSV}",
         "",
         format_metric_line("Method", method_metrics),
         format_metric_line("Naive", naive_metrics),
@@ -529,6 +894,11 @@ def main():
         [
             "",
             f"Rows written to {OUT_CSV} ({len(output_df)} rows from full 30-client detection input)",
+            f"Scenario-4 flagged rows written to {OUT_SCENARIO_CSV} ({len(scenario_flagged_df)} rows, "
+            f"{int(scenario_flagged_df['flagged_status'].sum())} flagged)",
+            f"Merged 30-client rows written to {OUT_MERGED_CSV} ({len(merged_df)} rows, "
+            f"{int(merged_df['flagged_status'].sum())} flagged, "
+            f"{int(merged_df['evaluated_for_attack'].sum())} rows attack-evaluated)",
             f"Summary plot written to {OUT_PNG}",
             f"Total runtime: {time.time() - start:.2f}s",
             "",

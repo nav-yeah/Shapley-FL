@@ -1,0 +1,51 @@
+GTG-Shapley signal decay across rounds
+============================================================
+source: shapley_scores.csv   (1500 rows, 30 clients, 50 rounds)
+
+Truncation at P1's current threshold (eps_b = 0.02):
+  all-zero (truncated) rounds : 38/50 (76%)
+  Shapley-live rounds         : 12/50 (24%)
+  live round numbers          : [1, 2, 3, 4, 5, 6, 8, 10, 15, 17, 21, 22]
+  permanent collapse from round 23: every round from 23 to 50 is truncated
+  [check] sweep reproduces the observed truncation count at eps_b=0.02 (38 rounds) — gain reconstruction verified.
+
+Why the signal dies:
+  mean |gain|, rounds 2-10          : 0.03895
+  mean |gain|, second half of run   : 0.00257
+  ratio                             : 15.2x
+  The threshold is an ABSOLUTE accuracy delta. It was
+  calibrated on a 5-round run where every round gained
+  several points. After convergence the same rule discards
+  every round, so the valuation signal is thrown away
+  exactly where per-client differences become subtle.
+
+Threshold sensitivity (how many rounds each eps_b keeps live):
+  eps_b     live   truncated   live%   ~test samples
+  0.0200     12        38      24%       41
+  0.0150     16        34      32%       31
+  0.0100     19        31      38%       21
+  0.0075     19        31      38%       16
+  0.0050     23        27      46%       10
+  0.0035     30        20      60%        7
+  0.0020     33        17      66%        4
+  0.0010     40        10      80%        2
+
+  For reference: on a 2074-sample test set (detected from preprocessed/har_clients.pkl), one sample = 0.00048 accuracy.
+  Because v0 and vN are evaluated on the SAME fixed test set
+  with two highly correlated models, the meaningful noise
+  floor is the paired-disagreement scale (a handful of
+  samples), not the independent-sample standard error.
+  eps_b = 0.0035 (~7 samples) is the proposed floor.
+
+Handoff notes:
+  P2: truncated rounds fall back to size-proportional
+      weights, so Shapley weighting is inactive in them.
+      Report the live-round count alongside any accuracy
+      comparison, or the comparison is misleading.
+  P3: exclude truncated rounds from eligible-round counts
+      before applying the sustained-deviation ratio. A
+      client cannot deviate from its history in a round
+      where nobody has a score.
+  P4: all-zero rounds still produce on-chain entries that
+      carry no valuation content; worth noting in the audit
+      trail description.
