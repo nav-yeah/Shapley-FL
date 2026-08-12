@@ -24,7 +24,7 @@ Rows written to byzantine_detection_results.csv (1500 rows from full 30-client d
 Scenario-4 flagged rows written to byzantine_scenario4_flagged.csv (500 rows, 59 flagged)
 Merged 30-client rows written to byzantine_detection_results_merged.csv (1500 rows, 59 flagged, 500 rows attack-evaluated)
 Summary plot written to byzantine_detection_summary.png
-Total runtime: 102.18s
+Total runtime: 82.19s
 
 Client-level summary:
   client=1 severity=0.00 truth=0 method_detected=1 naive_detected=1

@@ -103,6 +103,19 @@ def identify_live_rounds(df: pd.DataFrame) -> dict[int, bool]:
     return live_rounds
 
 
+def identify_live_rounds_by_client(df: pd.DataFrame) -> dict[int, dict[int, bool]]:
+    if "round" not in df.columns or "client_id" not in df.columns or "shapley_value" not in df.columns:
+        raise ValueError("Expected 'round', 'client_id', and 'shapley_value' columns")
+
+    live_rounds_by_client: dict[int, dict[int, bool]] = {}
+    for (client_id, round_number), round_frame in df.groupby(["client_id", "round"]):
+        values = round_frame["shapley_value"].to_numpy(dtype=float)
+        live_rounds_by_client.setdefault(int(client_id), {})[int(round_number)] = bool(
+            not np.allclose(values, 0.0)
+        )
+    return live_rounds_by_client
+
+
 def build_sustain_flags(
     anomalies: list[bool],
     live_mask: list[bool],
@@ -370,17 +383,18 @@ def apply_detector(
     thresholds: Thresholds,
     window_size: int,
     sustain_ratio: float,
-    live_rounds: dict[int, bool] | None = None,
+    live_rounds_by_client: dict[int, dict[int, bool]] | None = None,
 ):
     output_rows = []
-    if live_rounds is None:
-        live_rounds = identify_live_rounds(df)
+    if live_rounds_by_client is None:
+        live_rounds_by_client = identify_live_rounds_by_client(df)
 
     for client_id, client_frame in df.groupby("client_id"):
         client_frame = client_frame.sort_values("round").reset_index(drop=True)
         values = client_frame["shapley_value"].to_numpy(dtype=float)
         round_numbers = client_frame["round"].to_numpy(dtype=int)
-        live_mask = [bool(live_rounds.get(int(round_number), False)) for round_number in round_numbers]
+        client_live_rounds = live_rounds_by_client.get(int(client_id), {})
+        live_mask = [bool(client_live_rounds.get(int(round_number), False)) for round_number in round_numbers]
         feature_rows = rolling_window_features(
             values,
             window_size,
@@ -544,7 +558,7 @@ def build_attack_sweep(
     window_size: int,
     sustain_ratio: float,
     ratios=(0.2, 0.3),
-    live_rounds: dict[int, bool] | None = None,
+    live_rounds_by_client: dict[int, dict[int, bool]] | None = None,
 ):
     rows = []
     client_ids = sorted(baseline_df["client_id"].astype(int).unique())
@@ -569,7 +583,7 @@ def build_attack_sweep(
             thresholds,
             window_size,
             sustain_ratio,
-            live_rounds=live_rounds,
+            live_rounds_by_client=live_rounds_by_client,
         )
         client_flags = (
             detection_df.groupby("client_id")["flagged_status"].max().rename("flagged")
@@ -727,7 +741,7 @@ def main():
     start = time.time()
     baseline_df = load_baseline_series(BASELINE_CSV)
     thresholds = calibrate_thresholds(baseline_df, WINDOW_SIZE)
-    baseline_live_rounds = identify_live_rounds(baseline_df)
+    baseline_live_rounds_by_client = identify_live_rounds_by_client(baseline_df)
 
     # Deliverable CSV for P4: run detector over the full 30-client handoff file.
     detection_df = load_detection_series(DETECTION_INPUT_CSV)
@@ -736,7 +750,7 @@ def main():
         thresholds,
         WINDOW_SIZE,
         MIN_SUSTAINED_RATIO,
-        live_rounds=baseline_live_rounds,
+        live_rounds_by_client=baseline_live_rounds_by_client,
     )
     output_df = deliverable_df.drop(columns=["raw_anomaly"]).sort_values(
         ["round", "client_id"]
@@ -750,7 +764,7 @@ def main():
         thresholds,
         WINDOW_SIZE,
         MIN_SUSTAINED_RATIO,
-        live_rounds=baseline_live_rounds,
+        live_rounds_by_client=baseline_live_rounds_by_client,
     )
     attack_sweep_df.to_csv(OUT_ATTACK_SWEEP_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
     metrics_df = apply_detector(
@@ -758,7 +772,7 @@ def main():
         thresholds,
         WINDOW_SIZE,
         MIN_SUSTAINED_RATIO,
-        live_rounds=baseline_live_rounds,
+        live_rounds_by_client=baseline_live_rounds_by_client,
     )
     method_metrics, naive_metrics, eligible_df = row_level_metrics(
         metrics_df, client_ids, WINDOW_SIZE
