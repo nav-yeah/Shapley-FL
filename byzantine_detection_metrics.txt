@@ -3,7 +3,7 @@ P3 Byzantine detection via score drift
 Baseline calibration source: shapley_scores.csv
 Scenario evaluated: scenarios\scenario_4_noisy_labels.pkl
 Window size: 3, sustained ratio: 0.30
-Thresholds calibrated from clean data: temporal z threshold=2.0, sustain ratio=0.30 (15 anomalous rounds required)
+Thresholds calibrated from clean data: temporal z threshold=2.0, sustain ratio=0.30 (applied to each client's live rounds, not all 50 rounds)
 Slope normalization floor: 0.01
 Window behavior: rolling_variance/trend_slope are NaN for rounds < 3 by design.
 Eligible rows for row-level metrics: 480
@@ -24,7 +24,7 @@ Rows written to byzantine_detection_results.csv (1500 rows from full 30-client d
 Scenario-4 flagged rows written to byzantine_scenario4_flagged.csv (500 rows, 59 flagged)
 Merged 30-client rows written to byzantine_detection_results_merged.csv (1500 rows, 59 flagged, 500 rows attack-evaluated)
 Summary plot written to byzantine_detection_summary.png
-Total runtime: 82.19s
+Total runtime: 72.24s
 
 Client-level summary:
   client=1 severity=0.00 truth=0 method_detected=1 naive_detected=1
