@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Validate P3 sustain-rule fix",
+			"type": "shell",
+			"command": "C:/Users/Epari Subhransi/Python313/python.exe",
+			"args": [
+				"-c",
+				"import importlib.util; spec = importlib.util.spec_from_file_location('test_p3_detector', 'tests/test_p3_detector.py'); mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod); mod.test_identify_live_rounds_excludes_all_zero_rounds(); mod.test_build_sustain_flags_uses_only_live_rounds(); mod.test_apply_detector_uses_baseline_live_rounds(); print('regression checks passed')"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Git branch status",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"status",
+				"--porcelain",
+				"-b"
+			],
+			"group": "test"
+		},
+		{
+			"label": "echo-test",
+			"type": "shell",
+			"command": "echo",
+			"args": [
+				"hello"
+			],
+			"group": "test"
+		}
+	]
+}

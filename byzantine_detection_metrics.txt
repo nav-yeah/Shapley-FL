@@ -3,13 +3,14 @@ P3 Byzantine detection via score drift
 Baseline calibration source: shapley_scores.csv
 Scenario evaluated: scenarios\scenario_4_noisy_labels.pkl
 Window size: 3, sustained ratio: 0.30
-Thresholds calibrated from clean data: temporal z threshold=2.0, sustain ratio=0.30 (2 anomalous rounds required)
+Thresholds calibrated from clean data: temporal z threshold=2.0, sustain ratio=0.30 (applied to each client's live rounds, not all 50 rounds)
 Slope normalization floor: 0.01
 Window behavior: rolling_variance/trend_slope are NaN for rounds < 3 by design.
-Eligible rows for row-level metrics: 30
+Eligible rows for row-level metrics: 480
+Attack-sweep results written to p3_attack_sweep.csv
 
-Method     precision=0.8750 recall=0.8750 f1=0.8750 support=24 tp=21 fp=3 fn=3
-Naive      precision=0.7273 recall=0.3333 f1=0.4571 support=24 tp=8 fp=3 fn=16
+Method     precision=0.8136 recall=0.1250 f1=0.2167 support=384 tp=48 fp=11 fn=336
+Naive      precision=0.7619 recall=0.0417 f1=0.0790 support=384 tp=16 fp=5 fn=368
 
 Severity-bucket client precision/recall/F1 (method vs naive):
 severity | method_p method_r method_f1 | naive_p naive_r naive_f1 | n_clients
@@ -19,14 +20,14 @@ severity | method_p method_r method_f1 | naive_p naive_r naive_f1 | n_clients
   0.15 | 1.0000 1.0000 1.0000 | 1.0000 1.0000 1.0000 | 2
   0.20 | 1.0000 1.0000 1.0000 | 1.0000 1.0000 1.0000 | 2
 
-Rows written to byzantine_detection_results.csv (150 rows from full 30-client detection input)
-Scenario-4 flagged rows written to byzantine_scenario4_flagged.csv (50 rows, 30 flagged)
-Merged 30-client rows written to byzantine_detection_results_merged.csv (150 rows, 30 flagged, 50 rows attack-evaluated)
+Rows written to byzantine_detection_results.csv (1500 rows from full 30-client detection input)
+Scenario-4 flagged rows written to byzantine_scenario4_flagged.csv (500 rows, 59 flagged)
+Merged 30-client rows written to byzantine_detection_results_merged.csv (1500 rows, 59 flagged, 500 rows attack-evaluated)
 Summary plot written to byzantine_detection_summary.png
-Total runtime: 14.05s
+Total runtime: 72.24s
 
 Client-level summary:
-  client=1 severity=0.00 truth=0 method_detected=0 naive_detected=1
+  client=1 severity=0.00 truth=0 method_detected=1 naive_detected=1
   client=9 severity=0.00 truth=0 method_detected=1 naive_detected=1
   client=10 severity=0.05 truth=1 method_detected=1 naive_detected=1
   client=13 severity=0.05 truth=1 method_detected=1 naive_detected=1
