@@ -121,11 +121,11 @@ def build_sustain_flags(
     live_mask: list[bool],
     sustain_ratio: float,
 ) -> list[bool]:
-    live_rounds = [is_live for is_live in live_mask if is_live]
-    if not live_rounds:
+    live_round_count = sum(1 for is_live in live_mask if is_live)
+    if not live_round_count:
         return [False] * len(anomalies)
 
-    sustain_count = max(1, int(np.ceil(sustain_ratio * len(live_rounds))))
+    sustain_count = max(1, int(np.ceil(sustain_ratio * live_round_count)))
     flags = [False] * len(anomalies)
     cumulative_anomalies = 0
     is_client_flagged = False
@@ -885,7 +885,7 @@ def main():
         f"Baseline calibration source: {BASELINE_CSV}",
         f"Scenario evaluated: {SCENARIO_PATH}",
         f"Window size: {WINDOW_SIZE}, sustained ratio: {MIN_SUSTAINED_RATIO:.2f}",
-        f"Thresholds calibrated from clean data: temporal z threshold={TEMPORAL_Z_THRESHOLD:.1f}, sustain ratio={MIN_SUSTAINED_RATIO:.2f} ({int(np.ceil(MIN_SUSTAINED_RATIO * N_ROUNDS))} anomalous rounds required)",
+        f"Thresholds calibrated from clean data: temporal z threshold={TEMPORAL_Z_THRESHOLD:.1f}, sustain ratio={MIN_SUSTAINED_RATIO:.2f} (applied to each client's live rounds, not all 50 rounds)",
         f"Slope normalization floor: {SLOPE_DENOM_FLOOR:.2f}",
         f"Window behavior: rolling_variance/trend_slope are NaN for rounds < {WINDOW_SIZE} by design.",
         f"Eligible rows for row-level metrics: {len(eligible_df)}",
