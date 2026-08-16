@@ -1,0 +1,4 @@
+row_count,flagged_count,deployment_gas,total_logging_gas,avg_gas_per_entry,total_gas_including_deployment
+150,8,514318,30002858,200019,30517176
+600,38,514318,118454678,197424,118968996
+1500,98,514318,295352006,196901,295866324
