@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-08-15T17:44:25.961Z",
+  "results": [
+    {
+      "label": "150 rows (30 clients x 5 rounds)",
+      "csvPath": "D:\\shapely_proj\\Shapley-FL\\p4_blockchain-audit\\data\\synthetic_150.csv",
+      "rowCount": 150,
+      "flaggedCount": 8,
+      "contractAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "deploymentGas": "514318",
+      "totalGasUsed": "30002858",
+      "avgGasPerEntry": "200019",
+      "totalGasIncludingDeployment": "30517176"
+    },
+    {
+      "label": "600 rows (30 clients x 20 rounds)",
+      "csvPath": "D:\\shapely_proj\\Shapley-FL\\p4_blockchain-audit\\data\\synthetic_600.csv",
+      "rowCount": 600,
+      "flaggedCount": 38,
+      "contractAddress": "0xa6e99A4ED7498b3cdDCBB61a6A607a4925Faa1B7",
+      "deploymentGas": "514318",
+      "totalGasUsed": "118454678",
+      "avgGasPerEntry": "197424",
+      "totalGasIncludingDeployment": "118968996"
+    },
+    {
+      "label": "1500 rows (30 clients x 50 rounds)",
+      "csvPath": "D:\\shapely_proj\\Shapley-FL\\p4_blockchain-audit\\data\\synthetic_1500.csv",
+      "rowCount": 1500,
+      "flaggedCount": 98,
+      "contractAddress": "0x862E3acDE54f01a4540C4505a4E199214Ff6cD49",
+      "deploymentGas": "514318",
+      "totalGasUsed": "295352006",
+      "avgGasPerEntry": "196901",
+      "totalGasIncludingDeployment": "295866324"
+    }
+  ]
+}

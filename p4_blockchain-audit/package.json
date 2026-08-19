@@ -7,10 +7,21 @@
     "node": "hardhat node",
     "deploy": "hardhat run scripts/deploy.js --network localhost",
     "log": "hardhat run scripts/logResults.js --network localhost",
-    "demo": "hardhat run scripts/enforcement_demo.js --network localhost"
+    "demo": "hardhat run scripts/enforcement_demo.js --network localhost",
+    "generate-synthetic": "node scripts/generateSyntheticData.js",
+    "gas-scale": "hardhat run scripts/gasScaleAnalysis.js --network localhost",
+    "dispute-demo": "hardhat run scripts/disputeResolution.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "log:sepolia": "hardhat run scripts/logResults.js --network sepolia",
+    "demo:sepolia": "hardhat run scripts/enforcement_demo.js --network sepolia",
+    "log:sepolia:resumable": "hardhat run scripts/logResultsResumable.js --network sepolia"
+    
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
   }
 }

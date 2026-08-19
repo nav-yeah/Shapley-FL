@@ -1,0 +1,18 @@
+[
+  {
+    "round": 1,
+    "clientId": 1,
+    "resolved": true,
+    "matches": true,
+    "onChainHash": "0xa9d9e6deb0b6933d9572176fbbbe1e1715f238cb978e209a43ff6a92dcb75dbc",
+    "claimedHash": "0xa9d9e6deb0b6933d9572176fbbbe1e1715f238cb978e209a43ff6a92dcb75dbc"
+  },
+  {
+    "round": 1,
+    "clientId": 1,
+    "resolved": true,
+    "matches": false,
+    "onChainHash": "0xa9d9e6deb0b6933d9572176fbbbe1e1715f238cb978e209a43ff6a92dcb75dbc",
+    "claimedHash": "0x92cd422783b2dbd8948705c53d2faa1be717497324bd2d003e3f6c9ef8b318c7"
+  }
+]
