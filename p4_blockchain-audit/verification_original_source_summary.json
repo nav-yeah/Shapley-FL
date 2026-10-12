@@ -1,0 +1,784 @@
+{
+  "contractAddress": "0xA7694F641937687Af7D09a314Ee0fb828c1F78Fe",
+  "network": "sepolia",
+  "detectionSource": "./data/byzantine_detection_results.csv",
+  "shapleySource": "./data/shapley_scores.csv",
+  "csvRows": 1500,
+  "onChainEntries": 1500,
+  "verifiedRows": 1393,
+  "mismatchCount": 107,
+  "mismatches": [
+    {
+      "line": 2,
+      "key": "1-1",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 3,
+      "key": "1-2",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 4,
+      "key": "1-3",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 5,
+      "key": "1-4",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 6,
+      "key": "1-5",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 7,
+      "key": "1-6",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 8,
+      "key": "1-7",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 9,
+      "key": "1-8",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 10,
+      "key": "1-9",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 11,
+      "key": "1-10",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 12,
+      "key": "1-11",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 13,
+      "key": "1-12",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 14,
+      "key": "1-13",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 15,
+      "key": "1-14",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 16,
+      "key": "1-15",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 17,
+      "key": "1-16",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 18,
+      "key": "1-17",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 19,
+      "key": "1-18",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 20,
+      "key": "1-19",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 21,
+      "key": "1-20",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 22,
+      "key": "1-21",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 23,
+      "key": "1-22",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 24,
+      "key": "1-23",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 25,
+      "key": "1-24",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 26,
+      "key": "1-25",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 27,
+      "key": "1-26",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 28,
+      "key": "1-27",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 29,
+      "key": "1-28",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 30,
+      "key": "1-29",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 31,
+      "key": "1-30",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 32,
+      "key": "2-1",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 33,
+      "key": "2-2",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 34,
+      "key": "2-3",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 35,
+      "key": "2-4",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 36,
+      "key": "2-5",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 37,
+      "key": "2-6",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 38,
+      "key": "2-7",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 39,
+      "key": "2-8",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 40,
+      "key": "2-9",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 41,
+      "key": "2-10",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 42,
+      "key": "2-11",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 43,
+      "key": "2-12",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 44,
+      "key": "2-13",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 45,
+      "key": "2-14",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 46,
+      "key": "2-15",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 47,
+      "key": "2-16",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 48,
+      "key": "2-17",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 49,
+      "key": "2-18",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 50,
+      "key": "2-19",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 51,
+      "key": "2-20",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 52,
+      "key": "2-21",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 53,
+      "key": "2-22",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 54,
+      "key": "2-23",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 55,
+      "key": "2-24",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 56,
+      "key": "2-25",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 57,
+      "key": "2-26",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 58,
+      "key": "2-27",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 59,
+      "key": "2-28",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 60,
+      "key": "2-29",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 61,
+      "key": "2-30",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 62,
+      "key": "3-1",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 63,
+      "key": "3-2",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 64,
+      "key": "3-3",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 65,
+      "key": "3-4",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 66,
+      "key": "3-5",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 67,
+      "key": "3-6",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 68,
+      "key": "3-7",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 69,
+      "key": "3-8",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 70,
+      "key": "3-9",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 71,
+      "key": "3-10",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 72,
+      "key": "3-11",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 73,
+      "key": "3-12",
+      "errors": [
+        "Shapley value",
+        "data hash"
+      ]
+    },
+    {
+      "line": 722,
+      "key": "25-1",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 723,
+      "key": "25-2",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 726,
+      "key": "25-5",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 727,
+      "key": "25-6",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 728,
+      "key": "25-7",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 729,
+      "key": "25-8",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 730,
+      "key": "25-9",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 731,
+      "key": "25-10",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 732,
+      "key": "25-11",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 733,
+      "key": "25-12",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 735,
+      "key": "25-14",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 736,
+      "key": "25-15",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 739,
+      "key": "25-18",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 740,
+      "key": "25-19",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 741,
+      "key": "25-20",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 742,
+      "key": "25-21",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 743,
+      "key": "25-22",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 744,
+      "key": "25-23",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 745,
+      "key": "25-24",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 746,
+      "key": "25-25",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 747,
+      "key": "25-26",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 748,
+      "key": "25-27",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 749,
+      "key": "25-28",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 750,
+      "key": "25-29",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 751,
+      "key": "25-30",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 752,
+      "key": "26-1",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 753,
+      "key": "26-2",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    },
+    {
+      "line": 754,
+      "key": "26-3",
+      "errors": [
+        "Too Many Requests error received from eth-sepolia.g.alchemy.com"
+      ]
+    }
+  ]
+}
