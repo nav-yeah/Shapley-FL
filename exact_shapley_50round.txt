@@ -1,0 +1,27 @@
+Loading preprocessed HAR client data...
+Selecting 5 clients for exact Shapley...
+Chosen clients: [9, 16, 18, 24, 28]
+Shared test set size: 359 samples
+Each coalition trains for 50 FL rounds (3 local epochs each) — this will take a while since exact Shapley needs 32 full coalition trainings.
+
+Computing EXACT Shapley values (this is your ground truth)...
+  ...evaluated 10 marginal contributions (20 unique coalitions cached)
+  ...evaluated 20 marginal contributions (32 unique coalitions cached)
+  ...evaluated 30 marginal contributions (32 unique coalitions cached)
+  ...evaluated 40 marginal contributions (32 unique coalitions cached)
+  ...evaluated 50 marginal contributions (32 unique coalitions cached)
+  ...evaluated 60 marginal contributions (32 unique coalitions cached)
+  ...evaluated 70 marginal contributions (32 unique coalitions cached)
+  ...evaluated 80 marginal contributions (32 unique coalitions cached)
+
+Exact Shapley computation done in 136.26s
+Total unique coalitions evaluated: 32 (out of 32 possible)
+
+=== EXACT SHAPLEY VALUES (ground truth phi*) ===
+  Client 9: phi* = 0.131291
+  Client 16: phi* = 0.134076
+  Client 18: phi* = 0.123630
+  Client 24: phi* = 0.146843
+  Client 28: phi* = 0.157753
+
+Saved to exact_shapley_results.pkl

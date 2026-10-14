@@ -1,0 +1,99 @@
+Loading preprocessed HAR client data (all 30 clients)...
+Clients: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+Shared test set size: 2074 samples
+Rounds: 50, worker processes: 4
+
+V(empty) = 0.2011, V(full 30 clients) = 0.8867
+  ...permutation 5/300, 57 unique coalitions needed, 66 trained
+  ...permutation 10/300, 115 unique coalitions needed, 134 trained
+  ...permutation 15/300, 189 unique coalitions needed, 218 trained
+  ...permutation 20/300, 223 unique coalitions needed, 262 trained
+  ...permutation 25/300, 255 unique coalitions needed, 306 trained
+  ...permutation 30/300, 329 unique coalitions needed, 390 trained
+  ...permutation 35/300, 346 unique coalitions needed, 414 trained
+  ...permutation 40/300, 395 unique coalitions needed, 470 trained
+  ...permutation 45/300, 426 unique coalitions needed, 510 trained
+  ...permutation 50/300, 447 unique coalitions needed, 542 trained
+  ...permutation 55/300, 472 unique coalitions needed, 574 trained
+  ...permutation 60/300, 502 unique coalitions needed, 614 trained
+  ...permutation 65/300, 526 unique coalitions needed, 646 trained
+  ...permutation 70/300, 578 unique coalitions needed, 706 trained
+  ...permutation 75/300, 608 unique coalitions needed, 746 trained
+  ...permutation 80/300, 633 unique coalitions needed, 782 trained
+  ...permutation 85/300, 667 unique coalitions needed, 826 trained
+  ...permutation 90/300, 715 unique coalitions needed, 882 trained
+  ...permutation 95/300, 745 unique coalitions needed, 918 trained
+  ...permutation 100/300, 782 unique coalitions needed, 962 trained
+  ...permutation 105/300, 803 unique coalitions needed, 990 trained
+  ...permutation 110/300, 827 unique coalitions needed, 1022 trained
+  ...permutation 115/300, 869 unique coalitions needed, 1074 trained
+  ...permutation 120/300, 907 unique coalitions needed, 1118 trained
+  ...permutation 125/300, 925 unique coalitions needed, 1142 trained
+  ...permutation 130/300, 955 unique coalitions needed, 1178 trained
+  ...permutation 135/300, 986 unique coalitions needed, 1218 trained
+  ...permutation 140/300, 1000 unique coalitions needed, 1238 trained
+  ...permutation 145/300, 1021 unique coalitions needed, 1266 trained
+  ...permutation 150/300, 1046 unique coalitions needed, 1302 trained
+  ...permutation 155/300, 1076 unique coalitions needed, 1342 trained
+  ...permutation 160/300, 1110 unique coalitions needed, 1378 trained
+  ...permutation 165/300, 1138 unique coalitions needed, 1410 trained
+  ...permutation 170/300, 1162 unique coalitions needed, 1446 trained
+  ...permutation 175/300, 1177 unique coalitions needed, 1470 trained
+  ...permutation 180/300, 1216 unique coalitions needed, 1518 trained
+  ...permutation 185/300, 1246 unique coalitions needed, 1554 trained
+  ...permutation 190/300, 1306 unique coalitions needed, 1622 trained
+  ...permutation 195/300, 1337 unique coalitions needed, 1662 trained
+  ...permutation 200/300, 1365 unique coalitions needed, 1698 trained
+  ...permutation 205/300, 1394 unique coalitions needed, 1734 trained
+  ...permutation 210/300, 1432 unique coalitions needed, 1782 trained
+  ...permutation 215/300, 1465 unique coalitions needed, 1826 trained
+  ...permutation 220/300, 1486 unique coalitions needed, 1858 trained
+  ...permutation 225/300, 1537 unique coalitions needed, 1918 trained
+  ...permutation 230/300, 1551 unique coalitions needed, 1942 trained
+  ...permutation 235/300, 1573 unique coalitions needed, 1970 trained
+  ...permutation 240/300, 1612 unique coalitions needed, 2018 trained
+  ...permutation 245/300, 1636 unique coalitions needed, 2050 trained
+  ...permutation 250/300, 1697 unique coalitions needed, 2118 trained
+  ...permutation 255/300, 1736 unique coalitions needed, 2166 trained
+Converged at permutation 257
+
+Ran 257 permutations, 1741 unique coalitions needed (theoretical max for exact Shapley: 2^30 = 1073741824); 2173 coalition trainings actually run
+
+=== SHAPLEY VALUES (all 30 clients) ===
+  Client 1: phi = 0.023947
+  Client 2: phi = 0.026194
+  Client 3: phi = 0.022885
+  Client 4: phi = 0.025453
+  Client 5: phi = 0.022215
+  Client 6: phi = 0.022695
+  Client 7: phi = 0.024750
+  Client 8: phi = 0.021750
+  Client 9: phi = 0.021877
+  Client 10: phi = 0.024161
+  Client 11: phi = 0.023192
+  Client 12: phi = 0.025781
+  Client 13: phi = 0.026496
+  Client 14: phi = 0.018279
+  Client 15: phi = 0.028999
+  Client 16: phi = 0.021455
+  Client 17: phi = 0.026815
+  Client 18: phi = 0.020277
+  Client 19: phi = 0.021575
+  Client 20: phi = 0.025326
+  Client 21: phi = 0.023845
+  Client 22: phi = 0.022039
+  Client 23: phi = 0.016347
+  Client 24: phi = 0.027104
+  Client 25: phi = 0.015030
+  Client 26: phi = 0.026821
+  Client 27: phi = 0.021581
+  Client 28: phi = 0.022823
+  Client 29: phi = 0.018981
+  Client 30: phi = 0.014637
+
+Total time: 12226.78s
+Unique coalitions evaluated: 1741 (vs theoretical 2^30 = 1,073,741,824 for exact Shapley)
+Efficiency ratio: 1741/1073741824 = 1.62e-06
+Sum of phi = 0.6833
+
+Saved to gtg_shapley_full_scale_results.pkl

@@ -1,0 +1,24 @@
+Loading preprocessed HAR client data...
+Loading exact Shapley ground truth...
+Validating against ground truth for clients: [9, 16, 18, 24, 28] over 50 rounds (full trajectory per coalition)
+
+Running GTG-Shapley approximation (this calls full n_rounds training per UNIQUE coalition sampled, so still nontrivial time, but far fewer coalitions than exact Shapley's 32)...
+Converged at permutation 499
+Ran 499 permutations, 20 unique coalitions evaluated (vs 32 for exact Shapley)
+
+=== GTG-SHAPLEY APPROXIMATE VALUES ===
+  Client 9: phi_approx = 0.124059  (phi_exact = 0.131291)
+  Client 16: phi_approx = 0.130568  (phi_exact = 0.134076)
+  Client 18: phi_approx = 0.133308  (phi_exact = 0.123630)
+  Client 24: phi_approx = 0.159640  (phi_exact = 0.146843)
+  Client 28: phi_approx = 0.146298  (phi_exact = 0.157753)
+
+Approximation time: 129.83s (exact Shapley took 136.26s)
+Unique coalitions evaluated: 20 (exact Shapley evaluated all 32)
+
+=== ACCURACY VS GROUND TRUTH ===
+  Cosine Distance:    0.002335
+  Euclidean Distance: 0.021289
+  Maximum Difference: 0.012797
+
+Saved to gtg_shapley_results.pkl
