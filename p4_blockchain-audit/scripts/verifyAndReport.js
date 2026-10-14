@@ -18,7 +18,7 @@ function parseCSV(file) {
 }
 
 async function main() {
-  const source = "../byzantine_detection_results_merged.csv";
+  const source = require("path").join(__dirname, "..", "..", "byzantine_detection_results_merged.csv");
   const rows = parseCSV(source);
   const { address } = JSON.parse(
     fs.readFileSync("./deployed-address.json", "utf8")

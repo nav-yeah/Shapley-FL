@@ -4,3 +4,9 @@ __pycache__/
 *.pyc 
 preprocessed/ 
 data/ 
+
+# Reproducibility datasets for gas scaling experiments
+!p4_blockchain-audit/data/
+!p4_blockchain-audit/data/synthetic_150.csv
+!p4_blockchain-audit/data/synthetic_600.csv
+!p4_blockchain-audit/data/synthetic_1500.csv
