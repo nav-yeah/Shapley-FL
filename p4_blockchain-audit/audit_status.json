@@ -1,0 +1,13 @@
+{
+  "consolidatedRows": 1500,
+  "syntheticCsvFilesPresentLocally": [
+    "data/byzantine_detection_results.csv",
+    "data/shapley_scores.csv",
+    "data/synthetic_150.csv",
+    "data/synthetic_1500.csv",
+    "data/synthetic_600.csv"
+  ],
+  "syntheticCsvFilesAreGitTracked": true,
+  "enforcementReportVerifiedFor1500Run": false,
+  "note": "Gas totals in the consolidated reports are sums of perEntry values. Original measured-run totals are retained under descriptive names. Synthetic CSV files are tracked in version control for clean-checkout reproducibility. Local Hardhat and Sepolia gas reports describe separate runs and environments. The 1,500-entry enforcement report remains unverified for that run."
+}

@@ -780,5 +780,6 @@
         "Too Many Requests error received from eth-sepolia.g.alchemy.com"
       ]
     }
-  ]
+  ],
+  "note": "Of the 107 reported mismatches, 28 are Alchemy HTTP 429 rate-limit errors. These are RPC retrieval failures and should not be interpreted as confirmed on-chain data mismatches."
 }

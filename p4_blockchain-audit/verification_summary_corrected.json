@@ -1,0 +1,11 @@
+{
+  "contractAddress": "0x45E4a0f7933A56D8a30288039c883d36F768CC27",
+  "network": "sepolia",
+  "sourceShapley": "./data/shapley_scores.csv",
+  "sourceDetection": "./data/byzantine_detection_results.csv",
+  "csvRows": 1500,
+  "onChainEntries": 1500,
+  "verifiedRows": 1500,
+  "mismatchCount": 0,
+  "mismatches": []
+}
