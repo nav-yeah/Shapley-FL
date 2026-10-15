@@ -119,7 +119,3 @@ See `p4_blockchain-audit/p4.md` for details.
 - Coalition utility is measured on the same test set used to report accuracy,
   so Shapley-weighted accuracies are not independent held-out estimates.
 - All results are single-seed.
-
-## License
-
-See `LICENSE`.
