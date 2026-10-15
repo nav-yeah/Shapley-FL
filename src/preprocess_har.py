@@ -15,7 +15,8 @@ import matplotlib.pyplot as plt
 
 # ---- CONFIG ----
 DATA_DIR = os.path.join("data", "UCI HAR Dataset")
-OUTPUT_DIR = "preprocessed"
+from paths import PREPROCESSED
+OUTPUT_DIR = str(PREPROCESSED)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 

@@ -163,13 +163,14 @@ from fl_utils import (
 )
 from export_shapley_csv import gtg_shapley_one_round
 
-PKL_PATH = "preprocessed/har_clients.pkl"
-P1_SHAPLEY_CSV = "shapley_scores.csv"   # P1's committed 50-round scores
+from paths import PREPROCESSED, P1, P2
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
+P1_SHAPLEY_CSV = str(P1 / "shapley_scores.csv")   # P1's committed 50-round scores
 
-OUT_CSV = "aggregation_results.csv"
-OUT_ROUND_LOG = "aggregation_round_log.csv"
-OUT_TXT = "fairness_metrics.txt"
-OUT_PNG = "aggregation_comparison.png"
+OUT_CSV = str(P2 / "aggregation_results.csv")
+OUT_ROUND_LOG = str(P2 / "aggregation_round_log.csv")
+OUT_TXT = str(P2 / "fairness_metrics.txt")
+OUT_PNG = str(P2 / "aggregation_comparison.png")
 
 GLOBAL_SEED = 42
 N_ROUNDS = 50      # matches P1's 50-round pipeline (was 5)

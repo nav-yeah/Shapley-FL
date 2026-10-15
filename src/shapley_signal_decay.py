@@ -78,10 +78,11 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-CSV_IN = "shapley_scores.csv"
-CSV_OUT = "shapley_signal_decay.csv"
-PNG_OUT = "shapley_signal_decay.png"
-TXT_OUT = "shapley_signal_decay.txt"
+from paths import PREPROCESSED, P1
+CSV_IN = str(P1 / "shapley_scores.csv")
+CSV_OUT = str(P1 / "shapley_signal_decay.csv")
+PNG_OUT = str(P1 / "shapley_signal_decay.png")
+TXT_OUT = str(P1 / "shapley_signal_decay.txt")
 
 # P1's current truncation threshold, for reference lines in the plot.
 EPS_B_P1 = 0.02
@@ -96,7 +97,7 @@ EPS_CANDIDATES = [0.02, 0.015, 0.01, 0.0075, 0.005, 0.0035, 0.002, 0.001]
 # NOT the 2947 samples of the original UCI HAR test split — detecting it is
 # the difference between a correct and a misleading "test samples" column.
 N_TEST_DEFAULT = 2074
-PKL_PATH = "preprocessed/har_clients.pkl"
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
 
 
 def detect_n_test(pkl_path=PKL_PATH):

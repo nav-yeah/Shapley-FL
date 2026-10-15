@@ -29,8 +29,9 @@ import os
 import pickle
 import numpy as np
 
-PKL_PATH = "preprocessed/har_clients.pkl"
-OUT_DIR = "scenarios"
+from paths import PREPROCESSED, SCENARIOS
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
+OUT_DIR = str(SCENARIOS)
 N_CLIENTS = 10
 RANDOM_SEED = 42
 N_CLASSES = 6

@@ -31,8 +31,9 @@ from fl_utils import (
     LOCAL_EPOCHS, LOCAL_LR
 )
 
-SCENARIO_DIR = "scenarios"
-OUT_CSV = "scenario_results.csv"
+from paths import P1, SCENARIOS
+SCENARIO_DIR = str(SCENARIOS)
+OUT_CSV = str(P1 / "scenario_results.csv")
 GLOBAL_SEED = 42
 RANDOM_SEED = 42
 N_ROUNDS = 50

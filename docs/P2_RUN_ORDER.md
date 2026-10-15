@@ -38,7 +38,7 @@ git commit -m "Merge main (P1 50-round pipeline) into p2-adaptive-aggregation"
 Verify the merge brought in the new pipeline before going further:
 
 ```powershell
-python -c "import pandas as pd; d=pd.read_csv('shapley_scores.csv'); print(len(d), 'rows,', d['round'].max(), 'rounds')"
+python -c "import pandas as pd; d=pd.read_csv('results/p1_shapley/shapley_scores.csv'); print(len(d), 'rows,', d['round'].max(), 'rounds')"
 ```
 
 You want `1500 rows, 50 rounds`. If you still see 150 rows, the merge
@@ -64,13 +64,13 @@ Replace these five, and add the one new one:
 ## 2. Run the free result first (2 seconds, no training)
 
 ```powershell
-python shapley_signal_decay.py
+python src/shapley_signal_decay.py
 ```
 
-This reads P1's committed `shapley_scores.csv` and needs no FL training,
+This reads P1's committed `results/p1_shapley/shapley_scores.csv` and needs no FL training,
 no preprocessed data, nothing. It produces the finding that shapes
 everything else, and it has a built-in self-check that confirms the
-reconstruction is sound. Read `shapley_signal_decay.txt` before running
+reconstruction is sound. Read `results/p1_shapley/shapley_signal_decay.txt` before running
 anything expensive.
 
 ---
@@ -79,9 +79,9 @@ anything expensive.
 
 ```powershell
 # clear the 5-round outputs so nothing stale survives
-Remove-Item aggregation_results.csv, fairness_metrics.txt, aggregation_comparison.png -ErrorAction SilentlyContinue
+Remove-Item results/p2_aggregation/aggregation_results.csv, results/p2_aggregation/fairness_metrics.txt, results/p2_aggregation/aggregation_comparison.png -ErrorAction SilentlyContinue
 
-python shapley_weighted_fedavg.py
+python src/shapley_weighted_fedavg.py
 ```
 
 Budget **15–30 min**. ETA prints every round, and both CSVs flush every
@@ -91,7 +91,7 @@ survive.
 Watch for this line in the first few seconds:
 
 ```
-[check] round-1 phi matches P1's shapley_scores.csv exactly ...
+[check] round-1 phi matches P1's results/p1_shapley/shapley_scores.csv exactly ...
 ```
 
 That confirms your code and P1's engine agree. If it warns instead, stop
@@ -101,7 +101,7 @@ they exported the CSV — everything downstream depends on that agreement.
 Then the second configuration:
 
 ```powershell
-python shapley_weighted_fedavg.py --adaptive --suffix _adaptive
+python src/shapley_weighted_fedavg.py --adaptive --suffix _adaptive
 ```
 
 Another 15–30 min. This one writes to `*_adaptive.*` filenames, so the
@@ -115,11 +115,11 @@ to confirm it runs on your machine before committing half an hour.
 ## 4. Analysis scripts (seconds each)
 
 ```powershell
-python jains_fairness.py
-python plot_convergence.py
+python src/jains_fairness.py
+python src/plot_convergence.py
 
-python jains_fairness.py --csv aggregation_results_adaptive.csv --log aggregation_round_log_adaptive.csv --suffix _adaptive
-python plot_convergence.py --csv aggregation_results_adaptive.csv --log aggregation_round_log_adaptive.csv --suffix _adaptive
+python src/jains_fairness.py --csv results/p2_aggregation/aggregation_results_adaptive.csv --log results/p2_aggregation/aggregation_round_log_adaptive.csv --suffix _adaptive
+python src/plot_convergence.py --csv results/p2_aggregation/aggregation_results_adaptive.csv --log results/p2_aggregation/aggregation_round_log_adaptive.csv --suffix _adaptive
 ```
 
 ---
@@ -127,7 +127,7 @@ python plot_convergence.py --csv aggregation_results_adaptive.csv --log aggregat
 ## 5. FedProx baseline
 
 ```powershell
-python fedprox_compare.py
+python src/fedprox_compare.py
 ```
 
 Budget **20–40 min** — three arms this time. Optionally repeat with
@@ -143,17 +143,17 @@ existing file so you can run one alpha per session, but that means
 you don't clear it:
 
 ```powershell
-Remove-Item dirichlet_sweep_results.csv, dirichlet_sweep_rounds.csv -ErrorAction SilentlyContinue
+Remove-Item results/p2_aggregation/dirichlet_sweep_results.csv, results/p2_aggregation/dirichlet_sweep_rounds.csv -ErrorAction SilentlyContinue
 
-python dirichlet_alpha_sweep.py
+python src/dirichlet_alpha_sweep.py
 ```
 
 Budget **40–90 min** for all three alphas. To split it across sessions:
 
 ```powershell
-python dirichlet_alpha_sweep.py 0.1
-python dirichlet_alpha_sweep.py 0.5
-python dirichlet_alpha_sweep.py 1.0
+python src/dirichlet_alpha_sweep.py 0.1
+python src/dirichlet_alpha_sweep.py 0.5
+python src/dirichlet_alpha_sweep.py 1.0
 ```
 
 The figure and summary regenerate from the CSV each time, so they're
@@ -166,17 +166,17 @@ complete once the last alpha finishes.
 ```powershell
 git add shapley_weighted_fedavg.py dirichlet_alpha_sweep.py jains_fairness.py `
         plot_convergence.py fedprox_compare.py shapley_signal_decay.py
-git add aggregation_results.csv aggregation_round_log.csv fairness_metrics.txt `
-        aggregation_comparison.png convergence_curve.png `
-        jains_fairness.csv jains_fairness.txt jains_fairness.png `
-        fedprox_comparison.csv fedprox_comparison.txt fedprox_comparison.png `
-        dirichlet_sweep_results.csv dirichlet_sweep_rounds.csv `
-        dirichlet_sweep.png dirichlet_sweep.txt `
-        shapley_signal_decay.csv shapley_signal_decay.txt shapley_signal_decay.png
-git add aggregation_results_adaptive.csv aggregation_round_log_adaptive.csv `
-        fairness_metrics_adaptive.txt aggregation_comparison_adaptive.png `
-        convergence_curve_adaptive.png jains_fairness_adaptive.csv `
-        jains_fairness_adaptive.txt jains_fairness_adaptive.png
+git add results/p2_aggregation/aggregation_results.csv results/p2_aggregation/aggregation_round_log.csv results/p2_aggregation/fairness_metrics.txt `
+        results/p2_aggregation/aggregation_comparison.png results/p2_aggregation/convergence_curve.png `
+        results/p2_aggregation/jains_fairness.csv results/p2_aggregation/jains_fairness.txt results/p2_aggregation/jains_fairness.png `
+        results/p2_aggregation/fedprox_comparison.csv results/p2_aggregation/fedprox_comparison.txt results/p2_aggregation/fedprox_comparison.png `
+        results/p2_aggregation/dirichlet_sweep_results.csv results/p2_aggregation/dirichlet_sweep_rounds.csv `
+        results/p2_aggregation/dirichlet_sweep.png results/p2_aggregation/dirichlet_sweep.txt `
+        results/p1_shapley/shapley_signal_decay.csv results/p1_shapley/shapley_signal_decay.txt results/p1_shapley/shapley_signal_decay.png
+git add results/p2_aggregation/aggregation_results_adaptive.csv results/p2_aggregation/aggregation_round_log_adaptive.csv `
+        results/p2_aggregation/fairness_metrics_adaptive.txt results/p2_aggregation/aggregation_comparison_adaptive.png `
+        results/p2_aggregation/convergence_curve_adaptive.png results/p2_aggregation/jains_fairness_adaptive.csv `
+        results/p2_aggregation/jains_fairness_adaptive.txt results/p2_aggregation/jains_fairness_adaptive.png
 
 git commit -m "P2: 50-round adaptive aggregation; GTG truncation analysis and adaptive threshold"
 git push origin p2-adaptive-aggregation
@@ -210,7 +210,7 @@ flagged in ≥30% of *eligible* rounds. At 50 rounds with P1's current
 threshold, only 12 rounds carry any Shapley signal — so the rule is
 operating on 12 observations, not 50, and every round from 23 onward is
 blank. Their `N_ROUNDS = 5` constant in `p3_byzantine_detection.py` is
-also still un-updated. `shapley_signal_decay.csv` gives them the exact
+also still un-updated. `results/p1_shapley/shapley_signal_decay.csv` gives them the exact
 per-round eligibility flags.
 
 **P4 (blockchain).** 38 of 50 logged rounds will carry all-zero

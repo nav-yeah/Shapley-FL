@@ -51,9 +51,10 @@ import matplotlib
 matplotlib.use("Agg")  # no display needed; write straight to file
 import matplotlib.pyplot as plt
 
-CSV_IN = "aggregation_results.csv"
-LOG_IN = "aggregation_round_log.csv"
-PNG_OUT = "convergence_curve.png"
+from paths import P2
+CSV_IN = str(P2 / "aggregation_results.csv")
+LOG_IN = str(P2 / "aggregation_round_log.csv")
+PNG_OUT = str(P2 / "convergence_curve.png")
 
 # Trailing rounds averaged for the plateau-gap annotation.
 PLATEAU_WINDOW = 10

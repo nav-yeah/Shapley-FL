@@ -26,8 +26,9 @@ from fl_utils import (
     LOCAL_EPOCHS, LOCAL_LR
 )
 
-PKL_PATH = "preprocessed/har_clients.pkl"
-EXACT_RESULTS_PATH = "exact_shapley_results.pkl"
+from paths import PREPROCESSED
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
+EXACT_RESULTS_PATH = str(PREPROCESSED / "exact_shapley_results.pkl")
 RANDOM_SEED = 42
 GLOBAL_SEED = 42  # MUST match exact_shapley.py's GLOBAL_SEED
 
@@ -242,6 +243,6 @@ if __name__ == "__main__":
             "n_permutations": N_PERMUTATIONS,
         },
     }
-    with open("gtg_shapley_results.pkl", "wb") as f:
+    with open(str(PREPROCESSED / "gtg_shapley_results.pkl"), "wb") as f:
         pickle.dump(results, f)
     print("\nSaved to gtg_shapley_results.pkl")

@@ -56,7 +56,7 @@ async function main() {
 
   const byz = parseCSV("./data/byzantine_detection_results.csv");
   const shapleyRows = parseCSV("./data/shapley_scores.csv");
-  const merged = parseCSV(require("path").join(__dirname, "..", "..", "byzantine_detection_results_merged.csv"));
+  const merged = parseCSV(require("path").join(__dirname, "..", "..", "results", "p3_detection", "byzantine_detection_results_merged.csv"));
 
   const shapleyIndex = new Map(
     shapleyRows.map(r => [`${r.round}-${r.client_id}`, r])

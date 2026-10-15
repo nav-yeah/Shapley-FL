@@ -57,11 +57,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-CSV_IN = "aggregation_results.csv"
-LOG_IN = "aggregation_round_log.csv"
-TXT_OUT = "jains_fairness.txt"
-CSV_OUT = "jains_fairness.csv"
-PNG_OUT = "jains_fairness.png"
+from paths import P2
+CSV_IN = str(P2 / "aggregation_results.csv")
+LOG_IN = str(P2 / "aggregation_round_log.csv")
+TXT_OUT = str(P2 / "jains_fairness.txt")
+CSV_OUT = str(P2 / "jains_fairness.csv")
+PNG_OUT = str(P2 / "jains_fairness.png")
 
 # Tolerance for "these weights are indistinguishable from size-proportional".
 SIZE_MATCH_TOL = 1e-9

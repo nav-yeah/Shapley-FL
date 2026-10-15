@@ -112,11 +112,12 @@ from shapley_weighted_fedavg import (
     EPS_B_FIXED, EPS_I_FIXED, EPS_B_FLOOR, EPS_I_RATIO,
 )
 
-PKL_PATH = "preprocessed/har_clients.pkl"
-OUT_CSV = "dirichlet_sweep_results.csv"
-OUT_ROUND_CSV = "dirichlet_sweep_rounds.csv"
-OUT_PNG = "dirichlet_sweep.png"
-OUT_TXT = "dirichlet_sweep.txt"
+from paths import PREPROCESSED, P2
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
+OUT_CSV = str(P2 / "dirichlet_sweep_results.csv")
+OUT_ROUND_CSV = str(P2 / "dirichlet_sweep_rounds.csv")
+OUT_PNG = str(P2 / "dirichlet_sweep.png")
+OUT_TXT = str(P2 / "dirichlet_sweep.txt")
 
 GLOBAL_SEED = 42
 N_ROUNDS = 50           # follows P1's 50-round pipeline (was 5)
