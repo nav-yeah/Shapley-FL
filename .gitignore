@@ -1,12 +1,29 @@
-venv/ 
-__pycache__/ 
-*.pkl 
-*.pyc 
-preprocessed/ 
-data/ 
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pkl
+!scenarios/*.pkl
 
-# Reproducibility datasets for gas scaling experiments
+# Generated data
+preprocessed/
+data/
 !p4_blockchain-audit/data/
-!p4_blockchain-audit/data/synthetic_150.csv
-!p4_blockchain-audit/data/synthetic_600.csv
-!p4_blockchain-audit/data/synthetic_1500.csv
+
+# Node / Hardhat (P4)
+node_modules/
+p4_blockchain-audit/artifacts/
+p4_blockchain-audit/cache/
+
+# Secrets
+.env
+.env.*
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+
+# Misc
+*.log
+tree.txt
