@@ -8,12 +8,19 @@ __pycache__/
 # Generated data
 preprocessed/
 data/
-!p4_blockchain-audit/data/
+
+# Reproducibility datasets for p4 gas scaling experiments
+!src/p4_blockchain-audit/data/
+!src/p4_blockchain-audit/data/synthetic_150.csv
+!src/p4_blockchain-audit/data/synthetic_600.csv
+!src/p4_blockchain-audit/data/synthetic_1500.csv
+!src/p4_blockchain-audit/data/byzantine_detection_results.csv
+!src/p4_blockchain-audit/data/shapley_scores.csv
 
 # Node / Hardhat (P4)
 node_modules/
-p4_blockchain-audit/artifacts/
-p4_blockchain-audit/cache/
+src/p4_blockchain-audit/artifacts/
+src/p4_blockchain-audit/cache/
 
 # Secrets
 .env
@@ -22,8 +29,3 @@ p4_blockchain-audit/cache/
 # Editors and OS
 .vscode/
 .idea/
-.DS_Store
-
-# Misc
-*.log
-tree.txt
