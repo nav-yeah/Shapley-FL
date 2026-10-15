@@ -103,14 +103,14 @@ interesting differentiation happens under Byzantine injection (P3).
 
 ## Notes for P3 (format is locked)
 
-- `aggregation_results.csv`: exactly the agreed columns
+- `results/p2_aggregation/aggregation_results.csv`: exactly the agreed columns
   `round, client_id, aggregation_weight, global_accuracy_vanilla,
   global_accuracy_weighted` — 150 rows (30 clients × 5 rounds), weights
   sum to 1.0 within each round.
 - **Truncated rounds exist**: rounds where GTG-Shapley skipped
   computation (round gain ≤ ε_b = 0.02) have size-proportional weights,
   not Shapley-derived ones (rounds 2 and 5 in this run). In
-  `shapley_scores.csv` those rounds appear as all-zero φ — treat
+  `results/p1_shapley/shapley_scores.csv` those rounds appear as all-zero φ — treat
   all-zero rounds as "no signal" (exclude from your eligible-round
   count), not as evidence of anything.
 - Reminder from `SETUP_AND_HANDOFF.md` §4: every non-truncated round has
@@ -124,12 +124,12 @@ interesting differentiation happens under Byzantine injection (P3).
 ## Reproduction
 
 ```
-python preprocess_har.py            # if not already done
-python shapley_weighted_fedavg.py   # main deliverable, ~1-2 min CPU
-python dirichlet_alpha_sweep.py     # extension experiment, ~6 min CPU
-python dirichlet_alpha_sweep.py 0.5 # (optional) re-run a single alpha
+python src/preprocess_har.py            # if not already done
+python src/shapley_weighted_fedavg.py   # main deliverable, ~1-2 min CPU
+python src/dirichlet_alpha_sweep.py     # extension experiment, ~6 min CPU
+python src/dirichlet_alpha_sweep.py 0.5 # (optional) re-run a single alpha
 ```
 
-Outputs: `aggregation_results.csv`, `fairness_metrics.txt`,
-`aggregation_comparison.png`, `dirichlet_sweep_results.csv`,
-`dirichlet_sweep.png`.
+Outputs: `results/p2_aggregation/aggregation_results.csv`, `results/p2_aggregation/fairness_metrics.txt`,
+`results/p2_aggregation/aggregation_comparison.png`, `results/p2_aggregation/dirichlet_sweep_results.csv`,
+`results/p2_aggregation/dirichlet_sweep.png`.

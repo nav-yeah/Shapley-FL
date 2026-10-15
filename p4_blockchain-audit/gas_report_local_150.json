@@ -1,6 +1,6 @@
 {
   "contractAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-  "source": "../byzantine_detection_results_merged.csv",
+  "source": "../results/p3_detection/byzantine_detection_results_merged.csv",
   "txCount": 150,
   "totalGasUsed": "30406220",
   "avgGasPerEntry": "202708",

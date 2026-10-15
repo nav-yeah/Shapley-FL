@@ -109,10 +109,11 @@ from shapley_weighted_fedavg import (
     EPS_B_FIXED, EPS_I_FIXED, EPS_B_FLOOR, EPS_I_RATIO,
 )
 
-PKL_PATH = "preprocessed/har_clients.pkl"
-OUT_CSV = "fedprox_comparison.csv"
-OUT_PNG = "fedprox_comparison.png"
-OUT_TXT = "fedprox_comparison.txt"
+from paths import PREPROCESSED, P2
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
+OUT_CSV = str(P2 / "fedprox_comparison.csv")
+OUT_PNG = str(P2 / "fedprox_comparison.png")
+OUT_TXT = str(P2 / "fedprox_comparison.txt")
 
 MU = 0.1                 # FedProx proximal strength (mu=0 => vanilla FedAvg)
 BATCH_SIZE = 32          # same as fl_utils.local_train default

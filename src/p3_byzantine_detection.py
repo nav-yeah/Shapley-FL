@@ -54,15 +54,16 @@ from fl_utils import (
 )
 
 
-BASELINE_CSV = Path("shapley_scores.csv")
-DETECTION_INPUT_CSV = Path("shapley_scores.csv")
-SCENARIO_PATH = Path("scenarios") / "scenario_4_noisy_labels.pkl"
-OUT_CSV = Path("byzantine_detection_results.csv")
-OUT_TXT = Path("byzantine_detection_metrics.txt")
-OUT_PNG = Path("byzantine_detection_summary.png")
-OUT_SCENARIO_CSV = Path("byzantine_scenario4_flagged.csv")
-OUT_MERGED_CSV = Path("byzantine_detection_results_merged.csv")
-OUT_ATTACK_SWEEP_CSV = Path("p3_attack_sweep.csv")
+from paths import P1, P3, SCENARIOS
+BASELINE_CSV = P1 / "shapley_scores.csv"
+DETECTION_INPUT_CSV = P1 / "shapley_scores.csv"
+SCENARIO_PATH = SCENARIOS / "scenario_4_noisy_labels.pkl"
+OUT_CSV = P3 / "byzantine_detection_results.csv"
+OUT_TXT = P3 / "byzantine_detection_metrics.txt"
+OUT_PNG = P3 / "byzantine_detection_summary.png"
+OUT_SCENARIO_CSV = P3 / "byzantine_scenario4_flagged.csv"
+OUT_MERGED_CSV = P3 / "byzantine_detection_results_merged.csv"
+OUT_ATTACK_SWEEP_CSV = P3 / "p3_attack_sweep.csv"
 
 GLOBAL_SEED = 42
 RANDOM_SEED = 42
@@ -731,7 +732,7 @@ def main():
         )
     if not SCENARIO_PATH.exists():
         raise FileNotFoundError(
-            f"Missing {SCENARIO_PATH}. Run build_scenarios.py after preprocessing the HAR dataset."
+            f"Missing {SCENARIO_PATH}. Run src/build_scenarios.py after preprocessing the HAR dataset."
         )
     if not DETECTION_INPUT_CSV.exists():
         raise FileNotFoundError(

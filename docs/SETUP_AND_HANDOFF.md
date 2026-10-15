@@ -2,7 +2,7 @@
 
 This document is the starting point for anyone running or building on the
 Shapley computation engine. Read this before `experimentation_writeup.md`
-(the results) or before building on `shapley_scores.csv`.
+(the results) or before building on `results/p1_shapley/shapley_scores.csv`.
 
 ## 1. Environment Setup
 
@@ -28,17 +28,17 @@ Extract the zip, then copy the `UCI HAR Dataset` folder into:
 ## 3. Run Order (IMPORTANT — scripts depend on each other's outputs)
 
 ```cmd
-python preprocess_har.py        # produces preprocessed/har_clients.pkl
-python exact_shapley.py         # produces exact_shapley_results.pkl (ground truth, n=5, SLOW ~15s)
-python gtg_shapley_approx.py    # validates approximation against ground truth (n=5)
-python build_scenarios.py       # produces scenarios/*.pkl (5 distribution scenarios, n=10)
-python run_scenarios.py         # runs GTG-Shapley on all 5 scenarios (SLOW, ~15-20 min total)
-python export_shapley_csv.py    # produces shapley_scores.csv — THE FILE FOR P2/P3/P4 (fast, ~2 min)
+python src/preprocess_har.py        # produces preprocessed/har_clients.pkl
+python src/exact_shapley.py         # produces preprocessed/exact_shapley_results.pkl (ground truth, n=5, SLOW ~15s)
+python src/gtg_shapley_approx.py    # validates approximation against ground truth (n=5)
+python src/build_scenarios.py       # produces scenarios/*.pkl (5 distribution scenarios, n=10)
+python src/run_scenarios.py         # runs GTG-Shapley on all 5 scenarios (SLOW, ~15-20 min total)
+python src/export_shapley_csv.py    # produces results/p1_shapley/shapley_scores.csv — THE FILE FOR P2/P3/P4 (fast, ~2 min)
 ```
 
 `gtg_shapley_full_scale.py` (n=30, full-trajectory) is optional — it's a
 one-time efficiency benchmark, took ~63 minutes to run, and is NOT needed
-to produce `shapley_scores.csv`.
+to produce `results/p1_shapley/shapley_scores.csv`.
 
 All scripts use `GLOBAL_SEED = 42` / `RANDOM_SEED = 42` for
 reproducibility. Exact bit-identical results across machines are not
@@ -60,7 +60,7 @@ TWO different questions. Mixing them up will cause confusion:
 - This is what was used for the n=5 ground-truth validation and the
   n=30 / 5-scenario efficiency benchmarks reported in the writeup.
 
-**(B) Per-round Shapley** (`export_shapley_csv.py` → `shapley_scores.csv`)
+**(B) Per-round Shapley** (`export_shapley_csv.py` → `results/p1_shapley/shapley_scores.csv`)
 - Question answered: "What did each client contribute IN THIS SPECIFIC
   ROUND, given the model state at the start of that round?"
 - One Shapley value per client PER ROUND (150 rows total: 30 clients x
@@ -80,7 +80,7 @@ value. See `experimentation_writeup.md` Section 6 for the actual
 per-round value ranges observed.
 
 **Why this matters for P2 specifically (adaptive aggregation):**
-Use `shapley_scores.csv`'s per-round values for reweighting FedAvg each
+Use `results/p1_shapley/shapley_scores.csv`'s per-round values for reweighting FedAvg each
 round. Do NOT use the end-of-training values from the n=30 benchmark —
 those represent total contribution over all 5 rounds combined and
 aren't meaningful as a per-round reweighting signal.
@@ -110,8 +110,8 @@ aren't meaningful as a per-round reweighting signal.
 | `gtg_shapley_approx.py` | GTG-Shapley approximation, validated against exact_shapley.py output (n=5) |
 | `gtg_shapley_full_scale.py` | End-of-training Shapley at n=30 (efficiency benchmark only) |
 | `build_scenarios.py` | Builds the 5 paper-replication distribution scenarios (n=10) |
-| `run_scenarios.py` | Runs GTG-Shapley across all 5 scenarios, outputs `scenario_results.csv` |
-| `export_shapley_csv.py` | **Produces `shapley_scores.csv` -- the actual P2/P3/P4 handoff file** |
+| `run_scenarios.py` | Runs GTG-Shapley across all 5 scenarios, outputs `results/p1_shapley/scenario_results.csv` |
+| `export_shapley_csv.py` | **Produces `results/p1_shapley/shapley_scores.csv` -- the actual P2/P3/P4 handoff file** |
 | `experimentation_writeup.md` | Full results write-up (read after this doc) |
 
 ## 7. Questions / Issues

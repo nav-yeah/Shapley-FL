@@ -27,7 +27,8 @@ from fl_utils import (
     LOCAL_EPOCHS, LOCAL_LR
 )
 
-PKL_PATH = "preprocessed/har_clients.pkl"
+from paths import PREPROCESSED
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
 N_CLIENTS_FOR_GROUND_TRUTH = 5
 N_ROUNDS = 50            # FL rounds per coalition evaluation
 GLOBAL_SEED = 42
@@ -166,6 +167,6 @@ if __name__ == "__main__":
         "n_clients": N_CLIENTS_FOR_GROUND_TRUTH,
         "n_rounds": N_ROUNDS,
     }
-    with open("exact_shapley_results.pkl", "wb") as f:
+    with open(str(PREPROCESSED / "exact_shapley_results.pkl"), "wb") as f:
         pickle.dump(results, f)
     print("\nSaved to exact_shapley_results.pkl")

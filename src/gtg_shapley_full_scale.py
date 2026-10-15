@@ -28,7 +28,8 @@ from fl_utils import (
     LOCAL_EPOCHS, LOCAL_LR
 )
 
-PKL_PATH = "preprocessed/har_clients.pkl"
+from paths import PREPROCESSED
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
 RANDOM_SEED = 42
 GLOBAL_SEED = 42
 N_ROUNDS = 50
@@ -192,7 +193,7 @@ if __name__ == "__main__":
             "n_permutations": N_PERMUTATIONS,
         },
     }
-    with open("gtg_shapley_full_scale_results.pkl", "wb") as f:
+    with open(str(PREPROCESSED / "gtg_shapley_full_scale_results.pkl"), "wb") as f:
         pickle.dump(results, f)
     print("\nSaved to gtg_shapley_full_scale_results.pkl")
 

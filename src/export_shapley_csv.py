@@ -40,8 +40,9 @@ from fl_utils import (
     LOCAL_EPOCHS, LOCAL_LR
 )
 
-PKL_PATH = "preprocessed/har_clients.pkl"
-OUT_CSV = "shapley_scores.csv"
+from paths import PREPROCESSED, P1
+PKL_PATH = str(PREPROCESSED / "har_clients.pkl")
+OUT_CSV = str(P1 / "shapley_scores.csv")
 RANDOM_SEED = 42
 GLOBAL_SEED = 42
 N_ROUNDS = 50

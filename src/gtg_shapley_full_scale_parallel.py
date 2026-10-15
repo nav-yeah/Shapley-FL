@@ -6,6 +6,7 @@ import time
 
 import numpy as np
 
+from paths import PREPROCESSED
 import gtg_shapley_full_scale as seq   # reuse constants + helper functions
 
 _DATA = None
@@ -136,7 +137,7 @@ def main():
     print(f"Efficiency ratio: {n_unique}/{2**30} = {n_unique/2**30:.2e}")
     print(f"Sum of phi = {sum(phi.values()):.4f}")
 
-    with open("gtg_shapley_full_scale_results.pkl", "wb") as f:
+    with open(str(PREPROCESSED / "gtg_shapley_full_scale_results.pkl"), "wb") as f:
         pickle.dump({"client_ids": client_ids, "phi": phi, "elapsed_time": elapsed,
                      "n_unique_coalitions": n_unique, "n_trainings_run": n_trained,
                      "n_rounds": args.rounds, "workers": args.workers}, f)

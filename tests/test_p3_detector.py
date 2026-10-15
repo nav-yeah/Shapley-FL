@@ -53,7 +53,7 @@ def test_apply_detector_uses_baseline_live_rounds():
             "shapley_value": [0.0, 10.0, 10.0, 10.0, 10.0, 10.0, 0.0, 0.0],
         }
     )
-    thresholds = Thresholds(round_means={1: 0.0, 2: 0.0, 3: 0.0}, round_stds={1: 1.0, 2: 1.0, 3: 1.0})
+    thresholds = Thresholds(round_means={1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0}, round_stds={1: 1.0, 2: 1.0, 3: 1.0, 4: 1.0})
 
     result_df = apply_detector(
         detection_df,
