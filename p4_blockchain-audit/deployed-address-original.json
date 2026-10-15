@@ -1,4 +1,7 @@
 {
   "address": "0xA7694F641937687Af7D09a314Ee0fb828c1F78Fe",
-  "network": "sepolia"
+  "network": "sepolia",
+  "deployer": "0x78345bC5569f0fe1A552E188FaDd12F3Fe2Cd1Ed",
+  "deploymentTx": "0xda2afd2c464d44f73cb7ea3dd3eba8c6e6674b11a44b5590da9117d0af88d58d",
+  "deploymentBlock": 11499303
 }

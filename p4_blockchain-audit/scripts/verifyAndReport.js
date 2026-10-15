@@ -1,6 +1,12 @@
 const fs = require("fs");
 const hre = require("hardhat");
 
+// NOTE: this script compares on-chain entries against the MERGED source CSV.
+// Its output is NOT the corrected verification result. That is recorded in
+// verification_summary_corrected.json. Output goes to a separate file so
+// this script never overwrites the corrected summary.
+const OUTPUT_FILE = "./verification_merged_source_summary.json";
+
 function parseCSV(file) {
   const lines = fs.readFileSync(file, "utf8")
     .replace(/^\uFEFF/, "")
@@ -112,18 +118,15 @@ async function main() {
     mismatches: mismatches.slice(0, 100)
   };
 
-  fs.writeFileSync(
-    "./verification_summary.json",
-    JSON.stringify(output, null, 2)
-  );
+  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(output, null, 2));
 
   if (mismatches.length || verified.length !== 1500) {
-    console.log("VERIFICATION FAILED. See verification_summary.json");
+    console.log(`VERIFICATION FAILED. See ${OUTPUT_FILE}`);
     return;
   }
 
   console.log("SUCCESS: all 1500 rows match the on-chain records.");
-  console.log("Summary saved to verification_summary.json");
+  console.log(`Summary saved to ${OUTPUT_FILE}`);
   console.log("This script does not submit transactions.");
 }
 
