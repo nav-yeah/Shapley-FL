@@ -13,7 +13,7 @@ paper. All results use a single seed (42) and 50 federated rounds.
 | 1 | Data layer, FedAvg, GTG-Shapley engine | `preprocess_har.py`, `export_shapley_csv.py` | `shapley_scores.csv` |
 | 2 | Shapley-weighted aggregation, Dirichlet sweep, FedProx, fairness | `shapley_weighted_fedavg.py`, `dirichlet_alpha_sweep.py`, `fedprox_compare.py`, `jains_fairness.py` | `aggregation_results.csv` |
 | 3 | Cross-round score-drift Byzantine detection | `p3_byzantine_detection.py` | `byzantine_detection_results.csv` |
-| 4 | Solidity audit ledger (Hardhat, Sepolia) | `p4_blockchain-audit/` | `p4_blockchain-audit/*.json` |
+| 4 | Solidity audit ledger (Hardhat, Sepolia) | `src/p4_blockchain-audit/` | `src/p4_blockchain-audit/*.json` |
 
 Stages communicate only through the CSV files above.
 
@@ -70,7 +70,7 @@ not guaranteed because PyTorch numerics vary slightly by platform.
 ## Stage 4: blockchain audit
 
 ```bash
-cd p4_blockchain-audit
+cd src/p4_blockchain-audit
 npm install
 npx hardhat compile
 npm run node                    # terminal 1: local Hardhat network
@@ -85,7 +85,7 @@ For Sepolia, set `SEPOLIA_RPC_URL` and `SEPOLIA_PRIVATE_KEY` in a `.env` file
 The Sepolia run logs the 1,500-entry clean baseline (30 clients x 50 rounds) and
 `scripts/verifyCorrected.js` reads every entry back and compares it with
 `data/shapley_scores.csv` and `data/byzantine_detection_results.csv`.
-See `p4_blockchain-audit/p4.md` for details.
+See `src/p4_blockchain-audit/p4.md` for details.
 
 ## Where the paper's results come from
 
@@ -101,15 +101,15 @@ See `p4_blockchain-audit/p4.md` for details.
 | FedProx comparison | `fedprox_comparison.txt` |
 | Table V (detector) | `byzantine_detection_metrics.txt` |
 | Synthetic score-shift test (Krum, FLTrust) | `p3_attack_sweep.csv` |
-| Local gas scaling | `p4_blockchain-audit/gas_scale_report.csv` |
-| Sepolia verification and gas | `p4_blockchain-audit/verification_summary_corrected.json`, `p4_blockchain-audit/gas_report_corrected_sepolia.json` |
+| Local gas scaling | `src/p4_blockchain-audit/gas_scale_report.csv` |
+| Sepolia verification and gas | `src/p4_blockchain-audit/verification_summary_corrected.json`, `src/p4_blockchain-audit/gas_report_corrected_sepolia.json` |
 
 ## Repository layout
 
 - `*.py` in the root: pipeline scripts (stages 1 to 3)
 - `scenarios/`: the five ten-client distribution scenarios
 - `tests/`: unit tests for the detector
-- `p4_blockchain-audit/`: Solidity contract, Hardhat scripts, reports
+- `src/p4_blockchain-audit/`: Solidity contract, Hardhat scripts, reports
 - `*.csv`, `*.txt`, `*.png` in the root: generated results
 
 ## Notes
