@@ -1,8 +1,6 @@
-git rm -f debug_check.py git
-Remove-Item path_refs.txt -ErrorAction SilentlyContinue
-New-Item -ItemType Directory -Force preprocessed, paper | Out-Null
-New-Item -ItemType File -Force paper\.gitkeep | Out-Null
-Move-Item exact_shapley_results.pkl, gtg_shapley_results.pkl preprocessed\ -ErrorAction SilentlyContinue
-Add-Content .git\info\exclude "p4-premerge-backup/"
-Add-Content .git\info\exclude "tree.txt"
-git check-ignore -v preprocessed/gtg_shapley_results.pkl
+numpy==1.26.4
+torch
+pandas
+matplotlib
+pytest
+requests

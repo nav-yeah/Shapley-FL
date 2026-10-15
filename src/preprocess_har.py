@@ -3,7 +3,7 @@ ShapleyFL - UCI HAR Preprocessing Script
 Loads UCI HAR dataset, treats each subject as one federated client (natural non-IID split),
 and saves per-client train/test splits ready for use in Flower.
 
-Run from: C:\\Users\\Navya\\ShapleyFL
+Run from the repository root
 Usage: python preprocess_har.py
 """
 
